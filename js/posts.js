@@ -18,6 +18,20 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "java-cpu-debugging",
+    title: "Java 线上 CPU 飙高：三板斧定位法",
+    date: "2026-11-05",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P3 的 CPU 飙高答法：top 找进程、top -H -p 找线程、jstack 找代码行，三步定位到空转的那行代码。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P3《线上突发 CPU 飙高怎么定位和解决》。这套答法只有三个命令：<code>top</code> 找到 CPU 最高的进程，<code>top -H -p</code> 找到该进程里 CPU 最高的线程，线程 ID 转 16 进制后用 <code>jstack | grep</code> 打出线程栈，直接看到是哪一行代码在空转。</p>
+<p>视频演示里，这套流程两分钟定位到 <code>UserController.getUser</code> 第 19 行的一个死循环。和 P2 的 OOM 定位正好凑成一对姊妹题：OOM 靠 dump 看堆，CPU 靠 jstack 看栈，一个查内存、一个查执行，套路对仗工整。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-cpu-debugging.html"><strong>《Java 线上 CPU 飙高定位三板斧》</strong></a>——单文件图文页，支持深浅色切换，可以直接分享。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "java-oom-debugging",
     title: "Java 线上 OOM：三大原因与 dump 定位法",
     date: "2026-11-05",

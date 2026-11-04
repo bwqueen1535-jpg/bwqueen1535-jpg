@@ -30,21 +30,28 @@
   </header>
 
   <main class="container">
-    <section class="hero">
-      <h1 data-site-name>我的博客</h1>
-      <p data-site-desc>记录、思考与分享。</p>
-    </section>
+    <div class="frame">
+      <div class="ruler ruler--top" aria-hidden="true"></div>
+      <div class="ruler ruler--right" aria-hidden="true"></div>
+      <div class="ruler ruler--bottom" aria-hidden="true"></div>
+      <div class="ruler ruler--left" aria-hidden="true"></div>
 
-    <!-- 搜索文章标题、摘要和标签 -->
-    <input id="search-input" class="search-input" type="search"
-           placeholder="搜索文章标题、摘要或标签…" aria-label="搜索文章" />
+      <section class="hero">
+        <h1 data-site-name>我的博客</h1>
+        <p data-site-desc>记录、思考与分享。</p>
+      </section>
 
-    <!-- 标签筛选条（由 js/main.js 生成） -->
-    <div id="tag-chips" class="chips"></div>
+      <!-- 搜索文章标题、摘要和标签 -->
+      <input id="search-input" class="search-input" type="search"
+             placeholder="搜索文章标题、摘要或标签…" aria-label="搜索文章" />
 
-    <!-- 文章列表（由 js/main.js 生成） -->
-    <section id="post-list"></section>
-    <p id="empty-hint" hidden>没有找到匹配的文章，换个关键词试试。</p>
+      <!-- 标签筛选条（由 js/main.js 生成） -->
+      <div id="tag-chips" class="chips"></div>
+
+      <!-- 文章列表（由 js/main.js 生成） -->
+      <section id="post-list"></section>
+      <p id="empty-hint" hidden>没有找到匹配的文章，换个关键词试试。</p>
+    </div>
   </main>
 
   <footer class="site-footer">

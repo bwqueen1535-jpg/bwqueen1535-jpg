@@ -13,12 +13,6 @@ function escapeHtml(str) {
   ));
 }
 
-/* "2026-11-04" → "2026 年 11 月 4 日" */
-function formatDate(iso) {
-  const [y, m, d] = iso.split("-");
-  return `${y} 年 ${parseInt(m, 10)} 月 ${parseInt(d, 10)} 日`;
-}
-
 /* 所有文章按日期从新到旧排好序 */
 const sortedPosts = [...POSTS].sort((a, b) => b.date.localeCompare(a.date));
 
@@ -50,20 +44,25 @@ function setupThemeToggle() {
   });
 }
 
-/* ---------- 首页：文章卡片 ---------- */
-function createPostCard(post) {
+/* ---------- 首页：文章卡片（图纸面板样式） ---------- */
+function createPostCard(post, number) {
   const card = document.createElement("article");
   card.className = "post-card";
   card.innerHTML = `
-    <h2 class="post-card-title"><a href="${postUrl(post)}">${escapeHtml(post.title)}</a></h2>
-    <div class="post-meta">
-      <time datetime="${escapeHtml(post.date)}">${formatDate(post.date)}</time>
-      <span class="post-meta-tags">
-        ${post.tags.map((t) => `<button class="tag" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
-      </span>
+    <div class="post-card-head">
+      <span class="post-card-id">${String(number).padStart(2, "0")}</span>
+      <h2 class="post-card-title"><a href="${postUrl(post)}">${escapeHtml(post.title)}</a></h2>
+      <time class="post-card-date" datetime="${escapeHtml(post.date)}">${escapeHtml(post.date)}</time>
     </div>
-    <p class="post-excerpt">${escapeHtml(post.excerpt)}</p>
-    <a class="read-more" href="${postUrl(post)}">阅读全文 →</a>`;
+    <div class="post-card-body">
+      <div class="post-meta">
+        <span class="post-meta-tags">
+          ${post.tags.map((t) => `<button class="tag" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
+        </span>
+      </div>
+      <p class="post-excerpt">${escapeHtml(post.excerpt)}</p>
+      <a class="read-more" href="${postUrl(post)}">阅读全文 →</a>
+    </div>`;
   return card;
 }
 
@@ -90,7 +89,7 @@ function setupHome() {
       const haystack = (p.title + " " + p.excerpt + " " + p.tags.join(" ")).toLowerCase();
       return tagOk && (!q || haystack.includes(q));
     });
-    list.replaceChildren(...posts.map(createPostCard));
+    list.replaceChildren(...posts.map((p) => createPostCard(p, sortedPosts.indexOf(p) + 1)));
     emptyHint.hidden = posts.length > 0;
   }
 
@@ -146,7 +145,7 @@ function setupPostPage() {
     <a class="back-link" href="index.html">← 返回首页</a>
     <h1 class="post-title">${escapeHtml(post.title)}</h1>
     <div class="post-meta">
-      <time datetime="${escapeHtml(post.date)}">${formatDate(post.date)}</time>
+      <time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date)}</time>
       <span class="post-meta-tags">
         ${post.tags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join("")}
       </span>

@@ -3,8 +3,12 @@
  *
  * 改博客名字 / 简介 → 修改下面的 SITE
  * 发 布 新 文 章   → 复制数组里任意一个 { ... } 对象，
- *                    粘贴到最前面并修改字段
- * （博客里内置了一篇图文教程：《如何发布一篇新文章》）
+ *                    粘贴到最前面并修改字段：
+ *                    slug（网址名，建议英文/数字/短横线）、
+ *                    title、date（格式必须是 年-月-日）、
+ *                    tags（可以有多个，首页可按标签筛选）、
+ *                    excerpt（显示在首页的摘要）、
+ *                    content（正文，一段 HTML，用反引号包裹）
  * ========================================================= */
 
 const SITE = {
@@ -113,127 +117,6 @@ const POSTS = [
   <li><strong>按需 · Math Animator 等重依赖</strong>——需要动画时才装 Manim 和 LaTeX。</li>
 </ol>
 <p>跳过前两步直接去逛功能区，是这次困惑的主因。侧边栏有 70 多个路由，但它没有新手引导，也没打算让你一次走完。</p>
-`,
-  },
-  {
-    slug: "hello-world",
-    title: "你好，世界：欢迎来到我的博客",
-    date: "2026-11-04",
-    tags: ["随笔"],
-    excerpt: "博客的第一篇文章：这里是哪里、以后会写些什么，以及为什么它只有三个文件。",
-    content: `
-<p>你好，欢迎来到我的博客！这是这里的第一篇文章。</p>
-<p>这个博客没有用任何框架和构建工具，只有最朴素的 <strong>HTML、CSS 和 JavaScript</strong>。正因如此，它足够简单：每一行代码都看得懂、改得动，发布的每一篇文章也都只是一段普通文本。</p>
-<h2>这里会写些什么？</h2>
-<ul>
-  <li>学习和开发中踩过的坑、总结出的经验；</li>
-  <li>读过的书、看过的电影和路过的风景；</li>
-  <li>一些奇怪但好玩的小想法。</li>
-</ul>
-<blockquote>
-  <p>写博客最大的好处，是逼自己把一件事真正想清楚。</p>
-</blockquote>
-<p>想知道怎么发文章？博客里内置了一篇图文教程：<a href="post.html?p=how-to-write-a-post">如何发布一篇新文章</a>。想了解我是谁，可以去<a href="about.html">关于</a>页面看看。</p>
-<p>祝阅读愉快！🌱</p>
-`,
-  },
-  {
-    slug: "how-to-write-a-post",
-    title: "如何发布一篇新文章",
-    date: "2026-11-03",
-    tags: ["教程", "博客"],
-    excerpt: "只需要修改一个文件：复制现成的文章对象、改几个字段，保存刷新就能上线。",
-    content: `
-<p>在这个博客里发布一篇文章，只需要修改一个文件：<code>js/posts.js</code>。不需要命令行，也不需要任何构建工具。</p>
-<h2>三步发布</h2>
-<ol>
-  <li>用任意文本编辑器打开 <code>js/posts.js</code>；</li>
-  <li>把数组里现成的任意一个文章对象复制一份，<strong>粘贴到数组最前面</strong>；</li>
-  <li>修改它的各个字段，保存后刷新页面，文章就上线了。</li>
-</ol>
-<h2>每个字段是什么意思？</h2>
-<pre><code>{
-  slug: "my-first-post",     // 出现在文章网址里，建议只用英文、数字和短横线
-  title: "文章标题",
-  date: "2026-11-04",        // 格式必须是 年-月-日
-  tags: ["随笔"],            // 可以有多个，首页可以按标签筛选
-  excerpt: "显示在首页列表里的摘要，一两句话即可。",
-  content: &#96;&lt;p&gt;正文是一段 HTML，可以随意换行。&lt;/p&gt;&#96;
-}</code></pre>
-<p>注意 <code>content</code> 要用一对<strong>反引号</strong>（&#96;）包裹，这样正文可以随意换行，不必拼成一行。</p>
-<h2>常用 HTML 标签速查</h2>
-<table>
-  <thead>
-    <tr><th>想要的效果</th><th>写法</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>段落</td><td><code>&lt;p&gt;一段文字&lt;/p&gt;</code></td></tr>
-    <tr><td>小标题</td><td><code>&lt;h2&gt;小标题&lt;/h2&gt;</code></td></tr>
-    <tr><td>加粗 / 斜体</td><td><code>&lt;strong&gt;加粗&lt;/strong&gt;、&lt;em&gt;斜体&lt;/em&gt;</code></td></tr>
-    <tr><td>链接</td><td><code>&lt;a href="https://..."&gt;文字&lt;/a&gt;</code></td></tr>
-    <tr><td>图片</td><td><code>&lt;img src="图片地址" alt="说明"&gt;</code></td></tr>
-    <tr><td>列表</td><td><code>&lt;ul&gt;&lt;li&gt;一项&lt;/li&gt;&lt;li&gt;另一项&lt;/li&gt;&lt;/ul&gt;</code></td></tr>
-    <tr><td>引用</td><td><code>&lt;blockquote&gt;&lt;p&gt;引用的话&lt;/p&gt;&lt;/blockquote&gt;</code></td></tr>
-    <tr><td>代码块</td><td><code>&lt;pre&gt;&lt;code&gt;一行代码&lt;/code&gt;&lt;/pre&gt;</code></td></tr>
-  </tbody>
-</table>
-<h2>三个注意事项</h2>
-<ul>
-  <li><code>slug</code> 是文章网址的一部分，发布之后尽量不要改；</li>
-  <li>正文里如果要显示 <code>&lt;</code> 和 <code>&gt;</code> 符号本身，要写成 <code>&amp;lt;</code> 和 <code>&amp;gt;</code>；</li>
-  <li>正文里暂时不要直接打反引号字符，需要时可以用实体 <code>&amp;#96;</code> 代替。</li>
-</ul>
-<p>就这么多——写完保存、刷新页面，就可以看到新文章出现在首页最上面。</p>
-`,
-  },
-  {
-    slug: "typography-showcase",
-    title: "排版元素一览：这篇博客能写出什么效果",
-    date: "2026-11-02",
-    tags: ["设计"],
-    excerpt: "把博客支持的排版元素全部摆出来：标题、列表、表格、代码、引用、图片……调整样式时可以对照检查。",
-    content: `
-<p>这篇文章把博客支持的排版元素都摆出来：一来当演示，二来以后想调整样式时，可以直接对照检查效果。</p>
-<h2>标题与正文</h2>
-<p>上面的大标题是 <code>h2</code>，下面是 <code>h3</code>：</p>
-<h3>这是一个三级标题</h3>
-<p>正文段落里可以有<strong>加粗</strong>、<em>斜体</em>、<code>行内代码</code>和<a href="index.html">链接</a>。中文正文用的是 1.9 倍行距，长时间阅读不容易累。</p>
-<h2>列表</h2>
-<ul>
-  <li>无序列表的第一项；</li>
-  <li>第二项，里面还可以有<strong>加粗文字</strong>。</li>
-</ul>
-<ol>
-  <li>有序列表的第一项；</li>
-  <li>第二项。</li>
-</ol>
-<h2>引用</h2>
-<blockquote>
-  <p>简洁是智慧的灵魂，冗长是肤浅的藻饰。—— 莎士比亚</p>
-</blockquote>
-<h2>代码</h2>
-<p>行内代码像这样：<code>const answer = 42</code>。代码块长这样：</p>
-<pre><code>function greet(name) {
-  console.log("你好，" + name + "！");
-}
-
-greet("世界");</code></pre>
-<h2>表格</h2>
-<table>
-  <thead>
-    <tr><th>时间</th><th>小计划</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>11 月</td><td>把博客搭起来 ✅</td></tr>
-    <tr><td>12 月</td><td>写满五篇文章</td></tr>
-    <tr><td>明年</td><td>开始第一个长篇系列</td></tr>
-  </tbody>
-</table>
-<h2>图片</h2>
-<p>图片放在 <code>assets/</code> 目录里，用 <code>&lt;img&gt;</code> 标签插入：</p>
-<p><img src="assets/sample.svg" alt="示例插图：山与月亮" /></p>
-<hr />
-<p>以上就是全部元素。如果你看到了这一行，说明页面渲染一切正常 🎉</p>
 `,
   },
 ];

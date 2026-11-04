@@ -18,6 +18,20 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "order-timeout-design",
+    title: "Java 订单超时自动取消：四种实现与阿里选型",
+    date: "2026-11-05",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P6 的订单超时答法：DelayQueue、RocketMQ 定时消息、Redis 过期监听、定时任务批处理四种方案对比，阿里内部用「超时中心」批处理。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P6《订单超时自动取消是怎么实现的？》，一道阿里 P7 面试题。视频把市面上的定时任务实现梳理成四种：JDK <code>DelayQueue</code>（内存队列，单体小系统够用）、RocketMQ 定时消息（简单且精度高，但最长 24 小时、存储成本大）、Redis 过期监听（实现简单，但过期事件可能丢）。</p>
+<p>阿里内部用的是最朴素的第四种：<strong>定时任务分布式批处理</strong>——扫库批量捞出超时订单、批量改状态，统一收口到「超时中心」，延迟 30 秒内。理由是稳定（批次天然重试）、高效（批量压低数据库 QPS）、可运维（跑挂手动 SQL 修数）、成本低（不占中间件存储）。一句话：没有垃圾的技术，只有垃圾的开发。</p>
+<blockquote>
+  <p>📖 <a href="pages/order-timeout-design.html"><strong>《Java 订单超时自动取消的四种实现》</strong></a>——单文件图文页，支持深浅色切换，可以直接分享。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "java-cpu-debugging",
     title: "Java 线上 CPU 飙高：三板斧定位法",
     date: "2026-11-05",

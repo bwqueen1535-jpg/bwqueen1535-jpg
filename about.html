@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>关于 · 我的博客</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>" />
+  <script>
+    // 在页面渲染前先确定深浅色主题，避免闪一下白屏/黑屏
+    (function () {
+      var saved = localStorage.getItem("theme");
+      var dark = saved
+        ? saved === "dark"
+        : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+    })();
+  </script>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="site-name" href="index.html" data-site-name>我的博客</a>
+      <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="about.html" class="active">关于</a>
+        <button id="theme-toggle" type="button" aria-label="切换深浅色主题">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ✏️ 把下面的内容换成你自己的介绍 -->
+    <article class="prose page-article">
+      <h1>关于我</h1>
+      <p>你好，欢迎来到我的博客！我是这里的主人。</p>
+      <p>这一页用来介绍你自己：你是谁、平时在做什么、喜欢折腾些什么、可以怎么联系到你。用编辑器打开 <code>about.html</code>，直接修改下面的文字即可。</p>
+      <h2>我在写什么</h2>
+      <ul>
+        <li>技术学习笔记与实践心得；</li>
+        <li>阅读、观影和生活的碎碎念。</li>
+      </ul>
+      <h2>联系我</h2>
+      <ul>
+        <li>邮箱：<a href="mailto:your-email@example.com">your-email@example.com</a></li>
+        <li>GitHub：<a href="https://github.com/your-username">github.com/your-username</a></li>
+      </ul>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      © <span id="footer-year">2026</span> <span data-site-name>我的博客</span> · 用纯 HTML / CSS / JS 手工搭建
+    </div>
+  </footer>
+
+  <script src="js/posts.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

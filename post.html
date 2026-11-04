@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>文章 · 我的博客</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>" />
+  <script>
+    // 在页面渲染前先确定深浅色主题，避免闪一下白屏/黑屏
+    (function () {
+      var saved = localStorage.getItem("theme");
+      var dark = saved
+        ? saved === "dark"
+        : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+    })();
+  </script>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="site-name" href="index.html" data-site-name>我的博客</a>
+      <nav class="site-nav">
+        <a href="index.html" class="active">首页</a>
+        <a href="about.html">关于</a>
+        <button id="theme-toggle" type="button" aria-label="切换深浅色主题">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 文章内容由 js/main.js 根据网址里的 ?p=文章slug 渲染 -->
+    <article id="post-page"></article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      © <span id="footer-year">2026</span> <span data-site-name>我的博客</span> · 用纯 HTML / CSS / JS 手工搭建
+    </div>
+  </footer>
+
+  <script src="js/posts.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

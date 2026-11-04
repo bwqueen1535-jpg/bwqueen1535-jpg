@@ -1,0 +1,466 @@
+/* =========================================================
+ * 博客样式表
+ * 顶部 :root 里的变量集中控制了全站配色，想换主题色只需改这里
+ * ========================================================= */
+
+/* ---------- 主题变量 ---------- */
+:root {
+  --bg: #faf9f7;
+  --bg-card: #ffffff;
+  --text: #24292f;
+  --text-muted: #6e7781;
+  --accent: #4f46e5;
+  --accent-soft: rgba(79, 70, 229, 0.09);
+  --border: #e6e4e0;
+  --code-bg: #eeece8;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] {
+  --bg: #0f1419;
+  --bg-card: #171d26;
+  --text: #e2e6ea;
+  --text-muted: #98a0aa;
+  --accent: #8f94ff;
+  --accent-soft: rgba(143, 148, 255, 0.14);
+  --border: #262e3a;
+  --code-bg: #1f2632;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- 基础 ---------- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  line-height: 1.75;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+a {
+  color: var(--accent);
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* ---------- 顶部导航 ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.site-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.site-nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.site-nav a:hover,
+.site-nav a.active {
+  color: var(--accent);
+}
+
+#theme-toggle {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-card);
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+
+#theme-toggle:hover {
+  transform: rotate(15deg);
+}
+
+/* ---------- 首页 ---------- */
+.hero {
+  margin: 2.6rem 0 2.2rem;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin: 0 0 0.4rem;
+}
+
+.hero p {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.search-input {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.search-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+}
+
+.chip {
+  padding: 0.28rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.chip:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ---------- 文章卡片 ---------- */
+.post-card {
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.post-card-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+.post-card-title a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.post-card-title a:hover {
+  color: var(--accent);
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.7rem;
+  margin: 0.4rem 0 0.6rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.78rem;
+}
+
+button.tag {
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button.tag:hover {
+  text-decoration: underline;
+}
+
+.post-excerpt {
+  margin: 0.2rem 0 0.8rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.read-more {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.read-more:hover {
+  text-decoration: underline;
+}
+
+#empty-hint {
+  padding: 2.5rem 0;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ---------- 文章页 ---------- */
+.back-link {
+  display: inline-block;
+  margin: 2rem 0 1.2rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.back-link:hover {
+  color: var(--accent);
+}
+
+.post-title {
+  margin: 0 0 0.3rem;
+  font-size: 1.9rem;
+  line-height: 1.35;
+}
+
+.post-missing {
+  padding: 3.5rem 0;
+  text-align: center;
+}
+
+/* ---------- 正文排版 ---------- */
+.prose {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  overflow-wrap: break-word;
+}
+
+.prose h2 {
+  margin: 1.9em 0 0.6em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--border);
+  font-size: 1.4rem;
+  line-height: 1.4;
+}
+
+.prose h3 {
+  margin: 1.5em 0 0.5em;
+  font-size: 1.15rem;
+}
+
+.prose p {
+  margin: 0 0 1.1em;
+}
+
+.prose a {
+  text-underline-offset: 3px;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 1.1em;
+  padding-left: 1.6em;
+}
+
+.prose li {
+  margin-bottom: 0.35em;
+}
+
+.prose blockquote {
+  margin: 0 0 1.2em;
+  padding: 0.7em 1.2em;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  background: var(--accent-soft);
+}
+
+.prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.prose code {
+  padding: 0.15em 0.45em;
+  border-radius: 5px;
+  background: var(--code-bg);
+  font-family: ui-monospace, Consolas, "Courier New", monospace;
+  font-size: 0.88em;
+}
+
+.prose pre {
+  margin: 0 0 1.2em;
+  padding: 1em 1.2em;
+  border-radius: 10px;
+  background: #1e293b;
+  color: #e2e8f0;
+  overflow-x: auto;
+  line-height: 1.6;
+}
+
+.prose pre code {
+  padding: 0;
+  background: none;
+  font-size: 0.875rem;
+  color: inherit;
+}
+
+.prose img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin: 0.3rem 0 1.2rem;
+}
+
+.prose table {
+  width: 100%;
+  margin: 0 0 1.2em;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+}
+
+.prose th,
+.prose td {
+  padding: 0.5em 0.9em;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.prose th {
+  background: var(--code-bg);
+}
+
+.prose hr {
+  margin: 2em 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- 上一篇 / 下一篇 ---------- */
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2.6rem;
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--border);
+}
+
+.post-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  max-width: 48%;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.post-nav-link:hover {
+  color: var(--accent);
+}
+
+.post-nav-right {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.post-nav-label {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+/* ---------- 关于页 ---------- */
+.page-article {
+  margin: 2.6rem 0 0;
+}
+
+.page-article h1 {
+  font-size: 1.9rem;
+  margin: 0 0 0.8rem;
+}
+
+/* ---------- 页脚 ---------- */
+.site-footer {
+  margin-top: 3.5rem;
+  padding: 1.5rem 0 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* ---------- 小屏适配 ---------- */
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+
+  .post-title {
+    font-size: 1.5rem;
+  }
+
+  .post-card {
+    padding: 1.1rem 1.2rem;
+  }
+
+  .post-nav-link {
+    max-width: 46%;
+    font-size: 0.85rem;
+  }
+}

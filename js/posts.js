@@ -18,6 +18,28 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "answer-me-with-html-guide",
+    title: "Answer me with HTML 使用指南",
+    date: "2026-11-05",
+    tags: ["教程", "工具"],
+    excerpt: "让 Agent 把复杂问题答成一页 HTML 的开源工具：安装、用法、页面交互、高频模式，整理成了一页图文指南。",
+    content: `
+<p>这个博客的"图纸风"皮肤，来自开源项目 <a href="https://github.com/QingYunA/answer-me-with-html">Answer me with HTML</a>。它是一个 Agent Skill：Agent 遇到复杂问题时，不再回一堵文字墙，而是给一页带图表的 HTML。模型只写 Markdown 稿件，排版、配色、画图全部由它自带的 CLI 完成，产物是单文件、零依赖、断网也能打开的 .html 页面。</p>
+<p>我把它仓库里的使用说明整理成了一页图文指南，点这里阅读：</p>
+<blockquote>
+  <p>📖 <a href="pages/answer-me-with-html.html"><strong>《Answer me with HTML 使用指南》</strong></a>——单文件页面，支持深浅色切换，可以直接分享。</p>
+</blockquote>
+<p>指南里包括：</p>
+<ul>
+  <li>三种安装方式（推荐让 Agent 代办，一句话搞定）；</li>
+  <li>"说什么，会得到什么"：7 个真实例子；</li>
+  <li>页面上的交互：换主题、回复、标注、找回原稿；</li>
+  <li>高频模式、常用配置、更新与清理。</li>
+</ul>
+<p>顺便一提：你现在看到的这篇介绍本身，就是"先写 Markdown 稿、再由 CLI 排版"的思路在博客上的延续。</p>
+`,
+  },
+  {
     slug: "deeptutor-getting-started",
     title: "DeepTutor 从哪开始",
     date: "2026-11-04",

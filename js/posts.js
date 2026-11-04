@@ -18,6 +18,20 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "java-oom-debugging",
+    title: "Java 线上 OOM：三大原因与 dump 定位法",
+    date: "2026-11-05",
+    tags: ["Java", "面试"],
+    excerpt: "从 B 站场景题合集学到的 OOM 答法：三类原因归因、按系统挂没挂分两路定位、dump + VisualVM 六步找到代码行。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P2《线上 OOM 怎么定位和解决》。这套答法的骨架：OOM 先按三类原因归因（对象一次申请太多、资源耗尽不释放、堆内存不够），再按"系统挂没挂"分两路定位——已挂靠 <code>-XX:+HeapDumpOnOutOfMemoryError</code> 自动导 dump，还在运行用 <code>jmap -dump</code> 或 Arthas 在线导出。</p>
+<p>拿到 dump 之后，VisualVM 六步定位：载入 → 类视图按内存排序 → 找业务对象 → 展开 GC Root → 看线程引用 → 跳到代码行。视频演示里就是这么定位到 <code>UserService.getUser</code> 第 17 行死循环的。在线导 dump 会付出一次 Full GC/STW 的代价，但换来成倍的定位提速，值得。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-oom-debugging.html"><strong>《Java 线上 OOM 定位与解决》</strong></a>——单文件图文页，支持深浅色切换，可以直接分享。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "biligit-principle",
     title: "BiliGPT 如何总结 B 站视频",
     date: "2026-11-05",

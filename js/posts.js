@@ -18,6 +18,21 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "biligit-principle",
+    title: "BiliGPT 如何总结 B 站视频",
+    date: "2026-11-05",
+    tags: ["技术", "AI"],
+    excerpt: "不下载音视频，只抓字幕：B 站官方 API 取字幕轨道，压缩后交给 OpenAI 生成总结，一页拆清原理与能力边界。",
+    content: `
+<p>开源项目 <a href="https://github.com/Yuiffy/BiliGPT">BiliGPT</a> 能一键总结 B 站视频，但它从头到尾没有解析过任何音视频。真正的链路是：调 B 站官方 API 拿字幕轨道（优先 AI 生成的 ai-zh 字幕），把字幕文本压缩后连标题一起拼成 Prompt，交给 OpenAI 生成 Markdown 总结。</p>
+<p>我把源码里的完整原理整理成了一页图文：整体流程图、抓字幕的四个关键细节（SESSDATA 登录态、字幕轨道优先级、分P 处理、无字幕兜底）、为 4K 上下文设计的两层压缩、Prompt 结构，以及能力边界。</p>
+<blockquote>
+  <p>📖 <a href="pages/biligit-principle.html"><strong>《BiliGPT 如何总结 B 站视频》</strong></a>——单文件页面，支持深浅色切换，可以直接分享。</p>
+</blockquote>
+<p>一句话：快，是因为只处理文本；天花板也在这里——视频没有字幕时，它就无能为力。</p>
+`,
+  },
+  {
     slug: "answer-me-with-html-guide",
     title: "Answer me with HTML 使用指南",
     date: "2026-11-05",

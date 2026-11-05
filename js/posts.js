@@ -18,6 +18,146 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "mysql-buffer-pool",
+    title: "InnoDB BufferPool 工作过程",
+    date: "2026-11-05",
+    tags: ["MySQL", "面试"],
+    excerpt: "B 站场景题合集 P24：一条 UPDATE 的引擎层之旅——查缓存、整页加载、undo 备份、脏页刷盘，五个角色一台戏。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P24《MySQL 引擎层 BufferPool 工作过程原理》。一条 UPDATE 的完整链路：执行器调 InnoDB → 查 BufferPool，未命中就按索引定位数据页<strong>整页加载</strong>（不是缓存一条，是缓存 16KB 一整页，吃局部性红利）→ 修改前旧值写入 undo log（回滚 + MVCC 双职责）→ 更新缓存页，该页成为脏页 → 后台择机刷盘恢复。</p>
+<p>脏页不是坏事：它只表示内存与磁盘暂不一致，攒着一起刷盘正是 InnoDB 吞吐量的来源，也是 redo log 崩溃恢复要接手的问题。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-buffer-pool.html"><strong>《InnoDB BufferPool 工作过程》</strong></a>——单文件图文页，含完整链路图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mysql-bplus-tree",
+    title: "B 树与 B+ 树：InnoDB 为什么选后者",
+    date: "2026-11-05",
+    tags: ["MySQL", "面试"],
+    excerpt: "B 站场景题合集 P23：数据全放叶子层，树更宽 IO 更少；叶子双向链表让范围查询不再反复回根。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P23《B 树和 B+ 树的区别》。两条区别定胜负：<strong>一</strong>，B 树每个节点都存数据，B+ 树数据只在叶子层、非叶子纯索引——同样的 16KB 页塞更多索引，树更宽更矮，磁盘 IO 更少；<strong>二</strong>，B+ 树叶子层用双向链表串起来，范围查询定位起点后顺链表扫过去，B 树则要反复从根出发。</p>
+<p>面对"根节点命中 B 树更快"的追问：数据库面向海量数据，量小时链表都快，量大才看树的宽度与层数。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-bplus-tree.html"><strong>《B 树与 B+ 树：InnoDB 为什么选后者》</strong></a>——单文件图文页，含范围查询对比表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mysql-sharding-threshold",
+    title: "单表多少行要分表：用 B+ 树层数算",
+    date: "2026-11-05",
+    tags: ["MySQL", "架构"],
+    excerpt: "B 站场景题合集 P22：2000 万是拍脑袋——页 16KB 推算三层 B+ 树容量，百字节行 4 亿、1KB 行 4200 万，结论 1000 万行左右。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P22《单表最多数据量需要分表》。抛开行大小只谈行数是耍流氓。现场推算：页 16KB 减页头页尾约 200 字节得 16184 字节有效空间；示例行（4 个 int 加 varchar(20)）约 100 字节，一页 161 行；非叶子节点只存索引加指针（10 字节），一页 1618 个，三层容量 1618×1618×161 ≈ <strong>4.2 亿行</strong>。行大到 1KB 也还有 4200 万行。</p>
+<p>三层是性能甜点：3 次磁盘 IO 定位数据。2000 万只是参考值；阿里 500 万兼顾了机械硬盘时代的资源与备份恢复风险，SSD 时代可上浮。UP 结论：单表 1000 万行左右考虑分表。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-sharding-threshold.html"><strong>《单表多少行要分表：用 B+ 树层数算》</strong></a>——单文件图文页，含完整推算表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mysql-sql-execute",
+    title: "一条 SQL 在 MySQL 里的执行过程",
+    date: "2026-11-05",
+    tags: ["MySQL", "面试"],
+    excerpt: "B 站场景题合集 P21：连接、缓存（已移除）、解析、预处理、优化、执行六步链路；优化器会自动调整最左前缀的条件顺序。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P21《SQL 的执行过程》。六步链路：建立连接校验账号 → 服务层查缓存 → 解析器验语法 → 预处理器验表名字段名 → 优化器选路径生成执行计划 → 执行器调引擎层（InnoDB 先查 BufferPool，缺了才读磁盘）。常考追问是<strong>查询缓存为何被移除</strong>：缓存适合不变的数据，而库里的数据变得频繁，命中率低纯属性能浪费，5.7 默认关闭、8.0 彻底移除。</p>
+<p>优化器的小例子：联合索引要求最左前缀，条件没按最左列放开头时，优化器会自动重排条件顺序来命中索引。日志（binlog、undo log、redo log）贯穿执行过程，为可靠性与崩溃恢复服务。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-sql-execute.html"><strong>《一条 SQL 在 MySQL 里的执行过程》</strong></a>——单文件图文页，含六步链路表与引擎层流程，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "java-volatile",
+    title: "volatile 的两大应用场景",
+    date: "2026-11-05",
+    tags: ["Java", "并发"],
+    excerpt: "B 站场景题合集 P20：可见性救协同循环标志位，有序性救双重检查锁单例——new 的三步重排会造出空壳对象。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P20《volatile 有哪些应用场景》。volatile 只保证可见性与有序性（不保证原子性），对应两大场景：<strong>线程协同的循环标志位</strong>——每个线程有工作内存缓存副本，不加 volatile 另一线程的修改看不见，循环永不退出；<strong>双重检查锁单例</strong>——new 一个对象有三步（开堆内存、初始化、赋引用），指令重排成"开内存、赋引用、初始化"时，另一线程可能拿到只分配了内存的空壳对象，volatile 禁止重排。</p>
+<p>指令重排本身是 CPU 优化：利用取内存数据的空档期提前执行后续指令，单线程结果不变，多线程出事故。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-volatile.html"><strong>《volatile 的两大应用场景》</strong></a>——单文件图文页，含两段关键伪代码，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "springboot-max-requests",
+    title: "SpringBoot 能同时处理多少请求",
+    date: "2026-11-05",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P19：默认 8192+100=8292，饭店模型讲清 Tomcat 四参数——正式厨师、兼职上限、座位数、排队位。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P19《SpringBoot 可以同时处理多少请求》。答案藏在 Tomcat 四个参数里：<code>max-connections</code> 默认 8192（店里座位），<code>accept-count</code> 默认 100（门口排队位），相加 8292；另有 <code>min-spare-threads</code>（正式厨师）与 <code>max-threads</code>（兼职上限）。</p>
+<p>请求旅程：先看容量，满了进排队队列，<code>connection-timeout</code> 内等不到位置直接断开；线程按最小数起步、不够再开到最大，超出的进线程池阻塞队列。UP 用压测验证了这笔账：连接 30 + 排队 10、业务耗时 2 秒、超时 300ms，100 并发恰好 40 成功 60 失败。调参要结合硬件、IO 模型、压测与监控。</p>
+<blockquote>
+  <p>📖 <a href="pages/springboot-max-requests.html"><strong>《SpringBoot 能同时处理多少请求》</strong></a>——单文件图文页，含饭店模型对照表与请求旅程图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "java-bulk-insert",
+    title: "SpringBoot 百万级数据插入优化",
+    date: "2026-11-05",
+    tags: ["Java", "性能"],
+    excerpt: "B 站场景题合集 P18：拆 100 批异步并行，90 秒变 17 秒；IO 密集型核心线程数=核数×2，线程加码收益递减。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P18《SpringBoot 百万数据插入怎么优化》。三板斧：100 万条按 1 万一份拆 100 批；自定义 <code>ThreadPoolTaskExecutor</code> 配成 bean 后用 @Async 异步批量保存；<code>CountDownLatch(100)</code> 计数收口，await 等全部完成后统计耗时。实测 90 多秒优化到约 17 秒。</p>
+<p>线程数怎么算是重点：插库是 IO 密集型（网络 IO 会阻塞、CPU 空闲），核心线程数 = CPU 核数 × 2（16 核设 32/33）；CPU 密集型（计算排序）= 核数 + 1；最大线程数取核心两倍。线程加到 200 只快 1 秒——加码收益递减，资源留给其他业务。上线前后靠压测与监控调参，大厂用动态线程池在线调整加阈值告警。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-bulk-insert.html"><strong>《SpringBoot 百万级数据插入优化》</strong></a>——单文件图文页，含效果账与线程数经验表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "java-query-optimize",
+    title: "500ms 内查 1000 条数据：并发拆分",
+    date: "2026-11-05",
+    tags: ["Java", "并发"],
+    excerpt: "B 站场景题合集 P17：拆 5 份并行查、Future 合并，总耗时回到 200ms 量级；合并阶段注意线程安全。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P17《查询 200 条耗时 200ms，怎么在 500ms 内查 1000 条》。先算串行的账：单线程 5 次查询要 1 秒开外。解法是把 1000 条拆 5 份、线程池并行执行、<code>Future</code> 收集合并——并行不是压缩单次查询，而是让 5 次同时发生，总耗时约等于最慢的一次（200 多毫秒）。</p>
+<p>两个考点：线程池 <code>submit</code> 提交带返回值的任务；多线程各查各的，合并阶段避免并发写同一集合。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-query-optimize.html"><strong>《500ms 内查 1000 条数据：并发拆分》</strong></a>——单文件图文页，含实现示意代码，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "java-bigfile-count",
+    title: "200MB 内存读 1GB 文件，统计重复内容",
+    date: "2026-11-05",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P16：分块读取加 Map 计数是第一级；内容全不重复时哈希取模分 1024 片落盘逐片统计——内存不够外存凑。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P16《内存 200M 读取 1G 文件并统计重复内容》。两级答案：<strong>第一级</strong>，缓冲区分块读取（每次 1MB 到 50MB），内容做 Map 的 key、次数做 value；<strong>第二级</strong>，极端情况下内容几乎全不重复，Map 无限增长撑爆内存——此时对每条内容做哈希取模（如 %1024）落到对应分片文件，同一条内容必落同一分片，分片内统计等价于全量统计，逐片分块读入计数后清空 Map。</p>
+<p>点题：这就是"内存不够外存凑"，MapReduce 的思想雏形。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-bigfile-count.html"><strong>《200MB 内存读 1GB 文件，统计重复内容》</strong></a>——单文件图文页，含分片流程图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "redis-leaderboard",
+    title: "Redis ZSet 亿级用户实时积分排行榜",
+    date: "2026-11-05",
+    tags: ["Redis", "面试"],
+    excerpt: "B 站场景题合集 P15：ZSet 三条命令实现排行榜；亿级 member 成大 key 后按分数段分桶，查榜只看高分桶。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P15《Redis 如何实现上亿用户实时积分排行榜》。两个关键词定死选型：用户量上亿、要求实时——数据库扛不住，Redis ZSet 一把梭：<code>ZADD</code> 更新积分（member 存用户 id、score 存分数），<code>ZREVRANGE</code> 拿前 N 名，<code>ZREVRANK</code> 查个人名次，更新与查询都是 O(logN)。</p>
+<p>进阶答案是分桶：亿级 member 挤一个 key 就是大 key，会引发延迟与堵塞。按分数段拆桶（1000 分以上、500 以上、500 以下，过大再细拆），查前十名只需排序分数最高的桶，低分桶不用碰。方案没换，只是分治。</p>
+<blockquote>
+  <p>📖 <a href="pages/redis-leaderboard.html"><strong>《Redis ZSet 亿级用户实时积分排行榜》</strong></a>——单文件图文页，含分桶流程图与答题模板，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "redis-bitmap-login",
     title: "Redis Bitmap 记录亿级用户连续登录天数",
     date: "2026-11-05",

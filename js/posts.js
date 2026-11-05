@@ -18,6 +18,110 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "zero-copy",
+    title: "零拷贝：把 CPU 从搬运工解放出来",
+    date: "2026-11-06",
+    tags: ["网络", "性能"],
+    excerpt: "B 站场景题合集 P76：传统 IO 四拷贝四切换；sendfile 绕用户态，scatter-gather DMA 零接触，Java 有 FileChannel 与 Netty 两流派。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P76。传统读文件并发送是昂贵接力赛：DMA 到内核缓冲 → CPU 拷贝到用户态（应用只是过下手没改数据）→ CPU 拷回 socket 缓冲 → 网卡，共四次拷贝四次上下文切换。零拷贝两步走：<strong>sendfile</strong> 让数据在内核内流转绕过用户态；<strong>scatter-gather DMA</strong> 连内核内拷贝都免掉，只传文件描述符与长度，CPU 全程零接触——Kafka 与 Nginx 靠它跑满网卡。Java 两流派：FileChannel.transferTo 映射 sendfile（静态资源首选）；Netty 的 CompositeByteBuf 逻辑拼装加 Direct Memory 免堆外跨界拷贝（复杂协议拼接）。</p>
+<blockquote>
+  <p>📖 <a href="pages/zero-copy.html"><strong>《零拷贝：把 CPU 从搬运工解放出来》</strong></a>——单文件图文页，含接力赛链路图与流派表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "websocket-nginx",
+    title: "WebSocket 与 Nginx 的三道配置",
+    date: "2026-11-06",
+    tags: ["网络", "架构"],
+    excerpt: "B 站场景题合集 P75：101 握手借船出海；Nginx 强 HTTP/1.1、透传升级头、超时 3600s；集群用 Redis 发布订阅解连接孤岛。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P75。短轮询九成请求是空的，握手与 header 解析白耗资源；WebSocket 建全双工 TCP 长连接，服务器主动推送，延迟秒级压到毫秒级。握手是借船出海：HTTP 请求带 <code>Upgrade: websocket</code> 与 <code>Connection: Upgrade</code>，服务器回 101 Switching Protocols，之后 TCP 保持打开改传二进制帧。Nginx 三件事：强制 HTTP/1.1（默认 1.0 不支持升级）、透传两个升级头、读超时 3600 秒以上配应用层心跳。集群连接孤岛：WebSocket 有状态不能随意路由，用 Redis 发布订阅当消息总线跨节点投递。</p>
+<blockquote>
+  <p>📖 <a href="pages/websocket-nginx.html"><strong>《WebSocket 与 Nginx 的三道配置》</strong></a>——单文件图文页，含握手流程与 Nginx 三配置，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "cors",
+    title: "什么是跨域以及三种解决方案",
+    date: "2026-11-06",
+    tags: ["网络", "前端"],
+    excerpt: "B 站场景题合集 P74：同源策略防 CSRF；CORS 授权头是标准解，开发用 proxy 提效，生产用 Nginx 网络层天然同源。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P74。同源策略要求协议域名端口完全一致，请求到达服务器、数据回到浏览器后读取阶段仍被拦截——这是在防御 CSRF（恶意站点借残留凭证发起未授权转账）。三种解法按阶段选：<strong>CORS</strong>（服务端下发 Access-Control-Allow-Origin，预检通过放行，适合公共 API）；<strong>本地代理</strong>（Node 中间件转发，浏览器全程同源——关键物理特性：同源策略只限浏览器不限服务间通信）；<strong>Nginx 反向代理</strong>（统一域名，静态与 API 路径分流，网络层天然同源）。业内最佳实践：开发 proxy 提效，生产 Nginx 保障性能。</p>
+<blockquote>
+  <p>📖 <a href="pages/cors.html"><strong>《什么是跨域以及三种解决方案》</strong></a>——单文件图文页，含三方案定位表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "http-vs-rpc",
+    title: "HTTP 与 RPC 的区别",
+    date: "2026-11-06",
+    tags: ["网络", "架构"],
+    excerpt: "B 站场景题合集 P73：HTTP 写信通用但臃肿，RPC 发电报高效但强契约；成熟系统是网关串联的外宽内严。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P73。HTTP 自描述零门槛（无需 SDK 网络通即调），但文本解析与冗余 header 是高并发性能杀手；RPC 让远程调用像本地函数，IDL 契约只传值不传字段名，二进制极致压缩，强类型还能在编译期拦截参数错误。打比方：HTTP 是写信谁都能懂，RPC 是发电报只有机器读。成熟系统不做单选题——<strong>外宽内严</strong>：公网对不可控环境用 HTTP（兼容性大于一切），API 网关做协议转换，内网订单库存支付等核心服务用 RPC 的长连接与二进制序列化。选型：开放平台/验证期 HTTP，高并发集群 RPC。</p>
+<blockquote>
+  <p>📖 <a href="pages/http-vs-rpc.html"><strong>《HTTP 与 RPC 的区别》</strong></a>——单文件图文页，含对比表与外宽内严架构，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "ddos-defense",
+    title: "什么是 DDoS 攻击，如何防御",
+    date: "2026-11-06",
+    tags: ["安全", "架构"],
+    excerpt: "B 站场景题合集 P72：SYN Flood 堵半连接队列，应用层阴招专打贵操作；CDN 清洗、WAF 拦截、熔断削峰三层漏斗。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P72。DDoS 靠僵尸网络（肉鸡：被黑的服务器、路由器、摄像头）同时发起高频请求形成洪峰。网络层经典是 <strong>SYN Flood</strong>：伪造源 IP 只发 SYN 即失联，内核维持半连接队列耗尽，合法连接进不来；应用层更阴险——伪装正常请求专打贵操作（全表扫描、大文件导出、慢连接占线程），穿透防火墙拖垮线程池。防御是三层漏斗：CDN 边缘节点分散清洗体积型攻击，WAF 网关封禁限流，应用自身熔断保主链路加 MQ 削峰。本质是成本博弈：架构设计抬高攻击者成本。</p>
+<blockquote>
+  <p>📖 <a href="pages/ddos-defense.html"><strong>《什么是 DDoS 攻击，如何防御》</strong></a>——单文件图文页，含攻击原理表与漏斗图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mybatis-cursor-pagination",
+    title: "MyBatis 查 100 万页：别再用 Limit Offset",
+    date: "2026-11-06",
+    tags: ["MySQL", "性能"],
+    excerpt: "B 站场景题合集 P71：逻辑分页 OOM、物理分页怕深页；延迟关联降五个数量级，游标驱动与数据量彻底解耦。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P71。四级答案：<strong>逻辑分页</strong>（RowBounds）是应用层拙劣拦截——全量 select 塞满网络、JVM 实例化百万对象再丢弃，OOM；<strong>物理分页</strong> limit 不是跳过是扫描，深页扫百万行加回表随机 IO 耗时 30 秒；<strong>延迟关联</strong>——子查询只取主键 id（索引叶子免回表），再回表取全列，SQL 开销降五个数量级，百万级性价比之王；<strong>游标驱动</strong>——抛弃页码改 where id &gt; 上页最大 id，B+ 树直接 seek 目标叶子，复杂度与数据总量彻底解耦，亿级毫秒级。选型：后台小数据要跳页用 Limit，中型延迟关联，C 端亿级游标。</p>
+<blockquote>
+  <p>📖 <a href="pages/mybatis-cursor-pagination.html"><strong>《MyBatis 查 100 万页：别再用 Limit Offset》</strong></a>——单文件图文页，含四级方案对比，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mybatis-l2-cache",
+    title: "为什么大厂弃用 MyBatis 二级缓存",
+    date: "2026-11-06",
+    tags: ["MySQL", "架构"],
+    excerpt: "B 站场景题合集 P70：二级缓存是 namespace 级本地缓存，集群下节点间无法失效；标准答案是关掉它上移 Redis。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P70。一级缓存是 SqlSession 级（快而短命，提交或关会话即失效）；二级缓存为打破会话壁垒而生，namespace 级序列化暂存跨会话共享——单体时代的好方案。集群下致命：节点 A 更新清了自己的缓存，节点 B 无感知继续抱旧数据，支付库存场景就是事故级数据割裂。标准答案：显式关闭二级缓存，缓存压力上移 Redis 集群——节点间互不通气，就找全局唯一真理源头，MyBatis 专心做 ORM。</p>
+<blockquote>
+  <p>📖 <a href="pages/mybatis-l2-cache.html"><strong>《为什么大厂弃用 MyBatis 二级缓存》</strong></a>——单文件图文页，含两级缓存对比与集群脏数据链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "jpa-vs-mybatis",
+    title: "为什么 JPA 用半年哭着换 MyBatis",
+    date: "2026-11-06",
+    tags: ["Java", "架构"],
+    excerpt: "B 站场景题合集 P69：对象优先 vs SQL 优先；JPA 有 N+1 暗雷；既要又要就读写分离——写 JPA 保逻辑，读 MyBatis 提速。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P69。JPA 对象优先：数据库是被封起来的仓库，自动生成 SQL，复杂业务省事但藏着 N+1 陷阱——查 100 个订单默默跑 100 次子查询补关联数据，数据库堵死 IO 飙高。MyBatis SQL 优先：方法即 SQL 入口，执行过程绝对控制，性能全听你的。选型：高并发电商金融选 MyBatis（极致性能）；OA/ERP/CRM 等复杂业务内部系统选 JPA（领域建模强约束）。既要又要的混合方案：写走 JPA 守逻辑底线，读走 MyBatis 突破性能上限。</p>
+<blockquote>
+  <p>📖 <a href="pages/jpa-vs-mybatis.html"><strong>《为什么 JPA 用半年哭着换 MyBatis》</strong></a>——单文件图文页，含哲学对比与混合方案，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "springboot-cglib-aop",
     title: "SpringBoot 2.0 为何弃用 JDK 代理",
     date: "2026-11-06",

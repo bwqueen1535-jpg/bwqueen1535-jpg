@@ -18,6 +18,34 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "redis-bitmap-login",
+    title: "Redis Bitmap 记录亿级用户连续登录天数",
+    date: "2026-11-05",
+    tags: ["Redis", "面试"],
+    excerpt: "B 站场景题合集 P13 的答法：连续签到是二值统计，MySQL 流水表会膨胀；Bitmap 一天一张图、用户 id 做偏移，512MB 存 42 亿位，30 天 TTL 收尾。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P13《如何使用 Redis 记录上亿用户连续登录天数》。先否定 MySQL：每个用户每天一行签到记录，上亿用户一个月就是几十亿行，流水表必然膨胀。二值状态（登录/没登录）是 Redis Bitmap 的主场——string 类型实现，单 key 上限 512MB 约存 42.9 亿 bit，1 亿用户一天只要约 12MB。</p>
+<p>存储分两种维度：<strong>按日期建图</strong>（日期做 key、用户 id 做偏移）适合全站按天统计，但查单个用户要循环每个日期的 key；<strong>按用户建图</strong>（用户 id 做 key、天做偏移）适合查个人连续天数。游戏签到都做 30 天周期不是巧合：key 设 30 天过期，超期自动清理，内存可控。</p>
+<blockquote>
+  <p>📖 <a href="pages/redis-bitmap-login.html"><strong>《Redis Bitmap 记录亿级用户连续登录天数》</strong></a>——单文件图文页，含数学账与维度选型表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "redis-common-friends",
+    title: "亿级 keys 统计共同好友：这题有坑",
+    date: "2026-11-05",
+    tags: ["Redis", "架构"],
+    excerpt: "B 站场景题合集 P14 的答法：SINTERSTORE 取交集只是开场，坑在暗示你把亿级数据全塞 Redis；主动算成本账，换 MySQL 分库分表 / Neo4j / HBase+Hadoop。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P14《给你一个亿 Redis keys 统计双方的共同好友》。基础答法一行命令：Set 存好友（用户 id 做 key），<code>SINTERSTORE</code> 取交集。但这题有坑——"1 亿"这个数字就是在等你算成本账：亿级好友关系全放 Redis 等于拿内存当磁盘用，主动答出"不建议"才算读懂题。</p>
+<p>替代方案三选：<strong>MySQL</strong> 分库分表 + JOIN（数据量不大时兜底）、<strong>Neo4j</strong> 图数据库（共同好友、"可能认识的人"首选，天然支持，可存亿到十亿节点）、<strong>HBase + Hadoop</strong>（海量数据离线计算的通用套件）。三方案通用补丁：定时任务预计算热点账号（网红、大 V）的共同好友缓存进 Redis。亿级规模没有单一技术包打，抖音、微信也从未公开实现，都是组合加自研。</p>
+<blockquote>
+  <p>📖 <a href="pages/redis-common-friends.html"><strong>《亿级 keys 统计共同好友：这题有坑》</strong></a>——单文件图文页，含答题模板与选型表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "java-distributed-log",
     title: "Java 分布式日志存储架构：按规模选型",
     date: "2026-11-05",

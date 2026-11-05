@@ -18,6 +18,34 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "java-distributed-log",
+    title: "Java 分布式日志存储架构：按规模选型",
+    date: "2026-11-05",
+    tags: ["Java", "架构"],
+    excerpt: "B 站场景题合集 P11 的答法：单体写文件、分布式抽统一日志系统走 MQ 异步，MongoDB / ELK / Loki 三方案按场景选。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P11《如何设计分布式日志存储架构》。这道题不用死记方案，按项目规模回答：单体项目用 Logback 写本地文件（部署简单、成本低、稳定）；分布式下挨个服务翻文件没法排查，要抽统一日志系统，采集走 MQ 异步，满足两条设计要求——可用性（不影响业务）与扩展性（支持其他项目接入）。</p>
+<p>方案三选一：<strong>MongoDB</strong>（JSON 存日志灵活、查询丰富、天然分片复制，适合数据量大且结构灵活的场景）；<strong>ELK</strong>（Elasticsearch 存储 + Logstash 收集 + Kibana 展示，最主流；企业级改进用 Filebeat 替代过重的 Logstash）；<strong>Loki</strong>（Promtail 采集 + Grafana 展示，已用 Grafana 又只要轻量采集时的最佳选择）。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-distributed-log.html"><strong>《Java 分布式日志存储架构：按规模选型》</strong></a>——单文件图文页，含演进路线与三方案对比表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "redis-cache-problems",
+    title: "Redis 缓存三问：击穿、雪崩、穿透",
+    date: "2026-11-05",
+    tags: ["Redis", "面试"],
+    excerpt: "B 站场景题合集 P12 的答法：击穿单点失效用双重检查锁，雪崩集体失效用随机过期+哨兵，穿透两边都没有用空对象+布隆过滤器。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P12《使用 Redis 出现缓存击穿雪崩穿透怎么解决》。面试官通常不直接背题，而是问"你用 Redis 遇到过什么问题"。UP 用防弹衣记忆法一秒区分：Redis 是防弹衣、MySQL 是身体——<strong>击穿</strong>是单个热点 key 失效，大并发直击数据库（热点永不过期 + 同步锁双重检查，十台集群最多十个线程击穿，数据库扛得住，大道至简）；<strong>雪崩</strong>是大量 key 集中过期或 Redis 宕机（过期时间加随机打散 + 集群哨兵 + 多机房灾备）；<strong>穿透</strong>是缓存与数据库都没有、多为恶意攻击（参数校验 + 缓存空对象 + 布隆过滤器黑白名单）。</p>
+<p>双重检查锁是重点：第一次查缓存未命中加锁，进锁后第二次查（可能已被回填），仍未命中才查库回填——九成以上请求命中直接返回，只有过期瞬间才串行，不影响整体性能。</p>
+<blockquote>
+  <p>📖 <a href="pages/redis-cache-problems.html"><strong>《Redis 缓存三问：击穿、雪崩、穿透》</strong></a>——单文件图文页，含三问对比表、双重检查锁伪代码与记忆法，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "java-deadlock",
     title: "Java 线上死锁：jstack 定位与四大条件破坏法",
     date: "2026-11-05",

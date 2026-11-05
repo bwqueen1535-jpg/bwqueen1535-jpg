@@ -18,6 +18,123 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "springboot-cglib-aop",
+    title: "SpringBoot 2.0 为何弃用 JDK 代理",
+    date: "2026-11-06",
+    tags: ["Java", "Spring"],
+    excerpt: "B 站场景题合集 P68：JDK 代理与目标类是平行实现无法互转；CGLIB 子类天然兼容，Objenesis 补掉构造器双调，final 会静默断链。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P68。JDK 动态代理的类型陷阱：代理对象与目标类只是平行实现了同一接口，强类型机制下无法互转——注入实现类加 @Transactional 启动即 ClassCastException。CGLIB 用 ASM 生成目标类子类，注入变继承扩展天然兼容；早期未成默认是因构造函数重复调用（重资源构造器执行两次），Objenesis 绕过构造函数直接实例化后消除副作用且性能追平，Boot 2.0 才切换默认。架构师边界：final 类或 final 方法让代理链静默断裂（不抛异常），事务与权限切面根本进不去，record 与不可变设计场景必须警惕。</p>
+<blockquote>
+  <p>📖 <a href="pages/springboot-cglib-aop.html"><strong>《SpringBoot 2.0 为何弃用 JDK 代理》</strong></a>——单文件图文页，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "beanfactory-vs-appcontext",
+    title: "BeanFactory vs ApplicationContext",
+    date: "2026-11-06",
+    tags: ["Java", "Spring"],
+    excerpt: "B 站场景题合集 P67：裸发动机与全功能整车；懒加载首屏慢错误晚爆，预加载 fail-fast；三大整合能力。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P67。BeanFactory 是 IoC 核心引擎（低级容器规范，只做实例化与配置）；ApplicationContext 继承其全部底座升级为全功能整车。本质区别在加载策略：懒加载启动快但首屏延迟、配置错误等用户触发才暴露；预加载启动即完成全部单例装配，fail-fast 保证上线即健康。三大整合能力：统一资源加载（类路径/文件/网络一套代码）、国际化消息解析、事件发布订阅（观察者模式解耦）。选型：嵌入式等内存敏感场景 BeanFactory 不可替代，现代 Web 与微服务无脑 ApplicationContext。</p>
+<blockquote>
+  <p>📖 <a href="pages/beanfactory-vs-appcontext.html"><strong>《BeanFactory vs ApplicationContext》</strong></a>——单文件图文页，含加载策略对决表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "springboot-value-env",
+    title: "SpringBoot 配置读取三件套怎么选",
+    date: "2026-11-06",
+    tags: ["Java", "Spring"],
+    excerpt: "B 站场景题合集 P66：配置源是优先级队列，命令行秒杀文件；static 注入要 setter 木马；复杂配置无脑 ConfigurationProperties。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P66。底层：OS 变量、包外文件、命令行参数是平等数据源，队列位置决定覆盖权，Environment.getProperty 遍历队列返回唯一真理。@Value 两死局：static 注入失败（DI 基于实例、类加载时 bean 未出生，用非静态 setter 当特洛伊木马间接赋值）、final 变量用构造器注入保不可变。配置超五项或有层级时升级 @ConfigurationProperties：强类型建模启动即报错、松散绑定、IDEA 智能提示；@PropertySource 默认不支持 yml，手动实现 PropertySourceFactory 补齐。选型：单值用 @Value，业务模块用 ConfigurationProperties，框架级动态数据源直接操作 Environment。</p>
+<blockquote>
+  <p>📖 <a href="pages/springboot-value-env.html"><strong>《SpringBoot 配置读取三件套怎么选》</strong></a>——单文件图文页，含死局解法表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "bigdecimal-pitfalls",
+    title: "BigDecimal 的四个致命陷阱",
+    date: "2026-11-06",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P65：构造传 String、比较用 compareTo、除法设 RoundingMode、运算必接返回值——金融零容错四条防线。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P65。double 二进制无法精确表示 0.1，0.1+0.2 得 0.30000000000000004，金融零容错。BigDecimal 四陷阱：<strong>构造</strong>传 double 忠实记录已失真近似值，必须传 String 或 valueOf；<strong>比较</strong>equals 还比标度（1.0 与 1.00 不等），业务只用 compareTo；<strong>除法</strong> 1÷3 无限循环必须指定 scale 与 RoundingMode；<strong>不可变</strong>——所有运算返回新对象，不接返回值等于白算。四条防御矩阵即面试答案。</p>
+<blockquote>
+  <p>📖 <a href="pages/bigdecimal-pitfalls.html"><strong>《BigDecimal 的四个致命陷阱》</strong></a>——单文件图文页，含四陷阱解法表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "spring-singleton-scope",
+    title: "Spring 的单例是容器视角，不是 JVM 视角",
+    date: "2026-11-06",
+    tags: ["Java", "Spring"],
+    excerpt: "B 站场景题合集 P64：@Component 是容器缓存逻辑唯一，父子容器或同容器多定义都能造出多个实例。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P64。单例模式是代码级（私有构造+静态方法）同一 class loader 下物理唯一；Spring singleton 是同一 IoC 容器缓存中托管态逻辑唯一。两个翻车现场：微服务父子容器各自初始化同名 bean，Spring 侧自洽 JVM 侧两个实例，bean 里放全局计数器当场崩；同一容器配两个不同 id 指向同一 class，照样两个实例——singleton 是"按定义唯一"不是"按类唯一"。选型：99% 业务场景用 Spring bean（要 DI 与生命周期），硬件驱动句柄等底层资源才手写单例模式。</p>
+<blockquote>
+  <p>📖 <a href="pages/spring-singleton-scope.html"><strong>《Spring 的单例是容器视角，不是 JVM 视角》</strong></a>——单文件图文页，含概念对照与翻车现场，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "spring-autowire",
+    title: "Spring 自动装配演进与最佳实践",
+    date: "2026-11-06",
+    tags: ["Java", "Spring"],
+    excerpt: "B 站场景题合集 P63：byName 怕重构、byType 怕歧义，构造器注入是终极契约；Qualifier 与 Primary 解多实现冲突。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P63。演进链：XML 手动配置繁琐脆弱 → byName 取 setter 名匹配（重构变量名即注入失败）→ byType 按接口匹配（两实现并存选择困难启动失败）→ @Autowired 默认类型失败回退名称。三种注入流派：字段注入破坏封装不推荐；Setter 留给可选依赖；构造器注入是不可动摇的首选——实例化即完整态、依赖不可变、脱离容器可单测。多实现歧义两把钥匙：@Qualifier 按名称锁定，@Primary 设默认候选。</p>
+<blockquote>
+  <p>📖 <a href="pages/spring-autowire.html"><strong>《Spring 自动装配演进与最佳实践》</strong></a>——单文件图文页，含四代方案对比，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "java-list-pitfalls",
+    title: "99% 开发者都踩过的 List 坑",
+    date: "2026-11-06",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P62：asList 降维不可变是视图，subList 拖住 100MB 不放，CopyOnWriteArrayList 只配读多写少。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P62。Arrays.asList 三重幻象：传 int[] 泛型把数组当单一元素 size 为 1；返回内部类不可增删抛 UnsupportedOperationException；它是原数组的视图改哪边都联动——解药 new ArrayList 包裹解耦。subList 内存泄漏：切片持有原列表引用，10 条切片拖住 100MB 不让 GC——用构造函数拷贝断链。CopyOnWriteArrayList 选型：读直访无锁、写加锁复制整个数组再切换引用，只到最终一致且瞬时内存翻倍——读多写少的白名单是神器，高频写换锁机制。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-list-pitfalls.html"><strong>《99% 开发者都踩过的 List 坑》</strong></a>——单文件图文页，含三坑解药表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "order-split-merge",
+    title: "电商订单拆单与合单设计",
+    date: "2026-11-06",
+    tags: ["架构", "面试"],
+    excerpt: "B 站场景题合集 P61：拆的是履约单元；合单看仓库状态不看意愿；退货运费后置扣除，四层订单模型撑住业务架构。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P61。拆单本质：洗发水北京仓护发素广州仓，必须把付订单拆成关联仓库的子订单——付订单管收钱、子订单管发货。合单决策门：不看省钱意愿看仓库——已打面单封箱就红线，双方未处理且同仓库同时效才合。灵魂拷问：满 99 包邮买 100 拆 50+50 退一半怎么办？运费后置扣除，退 50 减运费 10 = 40，技术上要求支付单与商户子单解耦。四层模型：订单层（用户视角）、支付层（总账）、子单层（履约单元）、履约层（物流包裹）。</p>
+<blockquote>
+  <p>📖 <a href="pages/order-split-merge.html"><strong>《电商订单拆单与合单设计》</strong></a>——单文件图文页，含决策门流程与四层模型，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "gc-pause-ttsp",
+    title: "GC 耗时 10ms，系统为什么卡 10 秒",
+    date: "2026-11-06",
+    tags: ["JVM", "面试"],
+    excerpt: "B 站场景题合集 P60：差值是 Time To Safepoint——JIT 剥掉 int 计数循环的安全点检查，一个线程聋了全网陪等。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P60。GC 日志 real 0.01s、total 10s，差值是 TTSP（Time To Safepoint）：GC 吹哨要所有线程到最近安全点停车，而 JIT 认为计数循环确定跑得快，激进剥掉循环内 safe point check——T3 跑完两亿次循环前听不见哨声，GC 不开工其他线程不恢复，十秒真相。自救：野路子 int 改 long（利用 JIT 保守判断），正规军 -XX:+UseCountedLoopSafepoints 让计数循环也保留检查，牺牲一丢丢性能换稳定可预测。</p>
+<blockquote>
+  <p>📖 <a href="pages/gc-pause-ttsp.html"><strong>《GC 耗时 10ms，系统为什么卡 10 秒》</strong></a>——单文件图文页，含灾难现场还原图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "coupon-rule-engine",
     title: "优惠券规则引擎与组合优惠设计",
     date: "2026-11-06",

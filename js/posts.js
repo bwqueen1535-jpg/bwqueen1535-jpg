@@ -18,6 +18,71 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "jvm-tricolor-gc",
+    title: "JVM 三色标记与漏标：CMS 与 G1 的分水岭",
+    date: "2026-11-06",
+    tags: ["JVM", "面试"],
+    excerpt: "B 站场景题合集 P45：白灰黑三色、漏标两条件缺一不可；CMS 增量更新破条件一，G1 SATB 破条件二宁要浮动垃圾。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P45《JVM 三色标记与 GC 核心架构》。三色语义：白（未扫，扫完仍白即回收）、灰（自身已扫引用未扫完，浪头）、黑（安全上岸）。并发标记的漏标两条件缺一不可：黑色对象新增白色引用 + 灰色对象同时断开白色引用——被断开的白色对象会被误回收，用时直接空指针。两种解法各破一条件：<strong>CMS 增量更新</strong>破条件一，黑引白时把黑重置灰、重新标记阶段深度重扫（老年代大时代价大）；<strong>G1 SATB</strong> 破条件二，断开前拍照记录，按扫描开始快照当它还活着（浮动垃圾留到下轮）。G1 管几十上百 GB 成千上万 region，深度重扫停顿失控，宁要浮动垃圾换停顿可控。</p>
+<blockquote>
+  <p>📖 <a href="pages/jvm-tricolor-gc.html"><strong>《JVM 三色标记与漏标》</strong></a>——单文件图文页，含漏标推演图与解法对比表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "distributed-id-pitfalls",
+    title: "分布式 ID 面试必问五大坑",
+    date: "2026-11-06",
+    tags: ["架构", "面试"],
+    excerpt: "B 站场景题合集 P44：UUID 伪随机撞车 + 乱序性能杀手；雪花时钟回拨等一等或报错；按 QPS 决策树选型。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P44《分布式 ID 面试必问五大坑》。UUID v4 两大坑：伪随机（种子极小概率重复会撞车）与性能杀手（36 位乱序字符串，查询 0.8s 对比自增 0.1s，插入引发 B+ 树频繁页分裂）。雪花算法 64 位（41 时间戳 69 年 + 10 机器 1024 台 + 12 序列号每毫秒 4096）是大厂标准答案，致命伤时钟回拨——等待追上或报错人工介入。备选：美团 Leaf（工业级容灾，DB 挂了内存号段顶阵）、Redis 自增（挂了归零，持久化必配）、UUID v7（时间戳入位解决乱序的救赎版）。选型决策树：小系统 QPS 千以内 DB 自增；大厂电商雪花或 Leaf；老系统已有 Redis 则 Redis 自增或 UUID v7。</p>
+<blockquote>
+  <p>📖 <a href="pages/distributed-id-pitfalls.html"><strong>《分布式 ID 面试必问五大坑》</strong></a>——单文件图文页，含 UUID 坑表与决策树，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "springboot-config-encrypt",
+    title: "SpringBoot 配置文件敏感信息加密",
+    date: "2026-11-06",
+    tags: ["Java", "安全"],
+    excerpt: "B 站场景题合集 P43：Jasypt 三步——maven 插件生成 ENC 密文、贴回配置、启动参数带私钥；边界是私钥管理。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P43《配置文件敏感信息加密》。数据库账号、Redis 密码裸奔在配置里，同事翻仓库和黑客拿下服务器都能直连。Jasypt 三步：引依赖与 maven 插件 → <code>mvn jasypt:encrypt</code> 生成 <code>ENC(...)</code> 密文贴回 application.yml → 启动与部署时加 <code>-Djasypt.encryptor.password=私钥</code>。加密后无权限者只见密文，黑客没私钥解不开。边界要清楚：私钥与密文同机部署时，拿到启动命令同样能解——密钥管理（环境变量、密钥服务）才是完整答案。</p>
+<blockquote>
+  <p>📖 <a href="pages/springboot-config-encrypt.html"><strong>《SpringBoot 配置文件敏感信息加密》</strong></a>——单文件图文页，含操作序列与安全边界，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mybatis-sql-cost",
+    title: "MyBatis 记录 SQL 耗时的两种姿势",
+    date: "2026-11-06",
+    tags: ["Java", "性能"],
+    excerpt: "B 站场景题合集 P42：自研 Interceptor 拦 StatementHandler 计时告警，或 p6spy 换驱动零代码；生产环境都要慎用。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P42《MyBatis 怎么记录 SQL 耗时》。自研路线：实现 <code>Interceptor</code> 接口加 <code>@Component</code> 自动注册，@Intercepts 签名拦 StatementHandler 的 query（增删改另加 update 签名）——插件只能拦四大对象（Executor 缓存、StatementHandler 执行、ParameterHandler 参数、ResultSetHandler 结果），签名必须带参数类型防重载。现成路线：p6spy 换驱动加 spy.properties 零代码，计时更准（UP 实测 3ms 对比自研 13ms）。生产环境慎用：高并发下日志拖性能，只在开发测试环境开。</p>
+<blockquote>
+  <p>📖 <a href="pages/mybatis-sql-cost.html"><strong>《MyBatis 记录 SQL 耗时的两种姿势》</strong></a>——单文件图文页，含四大对象表与插件骨架，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "spring-vs-springboot",
+    title: "Spring 正常、SpringBoot 却报错的四处",
+    date: "2026-11-06",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P41：重名 bean 覆盖变报错、循环依赖默认拒绝、@Value 缺值快速失败、AOP 默认全 CGLIB。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P41。同一代码 Spring 能跑 SpringBoot 报错的四处差异：Bean 重名（Spring 后者覆盖，Boot 启动报错）；循环依赖（Spring 允许，Boot 认为是设计坏味道直接报错）；@Value 取不到值（Spring 把表达式原文当值静默埋雷，Boot 快速失败，建议设默认值容错）；AOP 动态代理（Spring 有接口走 JDK、无接口走 CGLIB，Boot 2.x 默认全 CGLIB）。每处 Boot 都保留了与 Spring 一致的回退配置。Boot 的哲学：默认即最佳实践，错了就大声失败。</p>
+<blockquote>
+  <p>📖 <a href="pages/spring-vs-springboot.html"><strong>《Spring 正常、SpringBoot 却报错的四处》</strong></a>——单文件图文页，含差异对照表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "springboot-anti-decompile",
     title: "SpringBoot 交付包防反编译",
     date: "2026-11-06",

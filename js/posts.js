@@ -18,6 +18,266 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "kafka-zookeeper",
+    title: "Kafka 中 ZooKeeper 的作用",
+    date: "2026-11-06",
+    tags: ["Kafka", "面试"],
+    excerpt: "B 站场景题合集 P98（完结）：临时节点存元数据——broker 注册、state 与 ISR、消费者分配、offset；新版已去 ZK 化。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P98《Kafka 中 zk 的作用》（系列完结篇）。老版 Kafka 靠 ZK 存元数据：<strong>brokers/ids</strong> 临时节点存 broker id 与物理地址，断连即删供生产者感知；<strong>topics 与 partitions</strong> 维护分布映射；<strong>state 节点</strong>存 Leader 所在 broker 与 ISR 列表（与 Leader 一致的可靠从节点集合，acks=-1 需全同步，Leader 宕机从 ISR 选新主）——选举核心；<strong>消费端</strong>存消费者与分区映射（挂掉触发 rebalance）与 offset（新版移入内部 topic）。客户端不直连 ZK，配 broker 地址间接获取元数据。新版 Kafka 已去 ZK 化，面试主动提及是加分项。</p>
+<blockquote>
+  <p>📖 <a href="pages/kafka-zookeeper.html"><strong>《Kafka 中 ZooKeeper 的作用》</strong></a>——单文件图文页，含节点树表与定位流程，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "kafka-pull-push",
+    title: "Kafka 是 Pull 还是 Push",
+    date: "2026-11-06",
+    tags: ["Kafka", "面试"],
+    excerpt: "B 站场景题合集 P97：Pull 按消费能力拉取、offset 玩转三种语义；空轮询用长阻塞化解；Push 不知消费能力会推垮下游。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P97。Pull 三好处：速率自控（消费完再拉，堆积量自己定）、批量灵活（一条或多条按能力定）、语义灵活（offset 手动提交时机不同，至少/最多/精准一次都好实现）。缺点是 Broker 空时消费端空轮询耗 CPU——Kafka 参数让拉空时长阻塞、或攒够条数再返回。Push 致命伤：不知道消费端进度，超时还推导致雪崩、拒绝服务与网络拥塞。结论：按消费能力拉取更灵活。</p>
+<blockquote>
+  <p>📖 <a href="pages/kafka-pull-push.html"><strong>《Kafka 是 Pull 还是 Push》</strong></a>——单文件图文页，含优劣对比表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "kafka-message-loss",
+    title: "Kafka 消息丢失的场景与处方",
+    date: "2026-11-06",
+    tags: ["Kafka", "面试"],
+    excerpt: "B 站场景题合集 P96：acks 调大加重试、min.insync.replicas 配 ISR 选举、先处理后提交加幂等——三段各自设防。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P96。发送端三种丢法：acks=0 发完不管；acks=1 Leader 落盘未同步到 Follower 就宕机；unclean.leader.election=true 选中 OSR 落后副本。处方：acks 调大（-1/all）加重试大于 1，选举限 ISR。Broker 端两个搭档参数：<code>acks=-1</code> 指 ISR 全部确认，<code>min.insync.replicas</code> 要求 ISR 数量大于 1，搭配使用多数副本未确认即生产者异常（代价是吞吐下降）；另可调小刷 page cache 间隔。消费端：先 commit 再处理会丢消息，先处理后 commit 会重复消费——选后者配接口幂等（消息 id 去重）。</p>
+<blockquote>
+  <p>📖 <a href="pages/kafka-message-loss.html"><strong>《Kafka 消息丢失的场景与处方》</strong></a>——单文件图文页，含三段处方单，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "kafka-architecture",
+    title: "Kafka 架构设计",
+    date: "2026-11-06",
+    tags: ["Kafka", "面试"],
+    excerpt: "B 站场景题合集 P95：Topic 分区主从副本是高吞吐核心；消费者组分摊分区；ZK 管 broker 注册、映射、选举、offset。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P95。Kafka 高吞吐日志收集首选，可靠性弱于 RocketMQ（RocketMQ 借鉴其架构优化而来）。核心概念链：Broker 组成集群；Topic 类比 Queue；<strong>Partition</strong> 是核心设计——Topic 拆成多个有序队列分散到多 Broker；<strong>Replication</strong> 一主多从，读写全走 Leader；<strong>消费者组</strong>内消费者分摊不同分区（同组同分区一条消息只投一人），组间负载均衡；<strong>offset</strong> 记录消费位置重启续消。ZK 五大职责：broker 注册（临时节点）、topic 分区映射、分区与消费者分配、Leader 选举、offset 存储。</p>
+<blockquote>
+  <p>📖 <a href="pages/kafka-architecture.html"><strong>《Kafka 架构设计》</strong></a>——单文件图文页，含概念表与吞吐原理图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "rabbitmq-dlx-delay",
+    title: "RabbitMQ 死信队列与延时队列",
+    date: "2026-11-06",
+    tags: ["MQ", "面试"],
+    excerpt: "B 站场景题合集 P94：被拒、过期、超长三种死信转投 DLX；TTL 加死信队列组合实现延时——订单超时关单经典方案。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P94。三种消息变死信：basicNack/basicReject 且不重回队列、TTL 到期、队列超长。配置 DLX 属性即挂死信交换机——它和死信队列都是普通对象，任何交换机类型可充当，多业务队列可共用并用不同 RoutingKey 区分。<strong>延时队列组合拳</strong>：消息设 TTL 投入无人监听的普通队列，到期自动转投死信交换机流入死信队列，消费者只监听死信队列——消息 TTL 与队列 TTL 同设取较小值。典型场景：订单超时自动关单。</p>
+<blockquote>
+  <p>📖 <a href="pages/rabbitmq-dlx-delay.html"><strong>《RabbitMQ 死信队列与延时队列》</strong></a>——单文件图文页，含死信来源表与延时组合图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "rabbitmq-transaction",
+    title: "RabbitMQ 事务消息",
+    date: "2026-11-06",
+    tags: ["MQ", "面试"],
+    excerpt: "B 站场景题合集 P93：confirm 保必达但保不了原子性；事务消息先进临时队列、提交才可见、回滚即撤回——性能降数倍。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P93。confirm 是事后通知，保证不了消息发送与本地逻辑的原子性——生产端逻辑失败时消息可能已被消费。事务消息机制：信道开启事务后消息进临时队列而非真队列，提交事务才移入真队列（消费可见），回滚则撤回；流程出错抛 IO 异常由业务决定回滚或重发。消费端 autoAck=false 时把 ACK 放进事务以事务提交为准（回滚后已 ACK 的消息仍留在队列），autoAck=true 则不支持事务。性能因多次连接交互降数倍——能选 confirm 先选 confirm。</p>
+<blockquote>
+  <p>📖 <a href="pages/rabbitmq-transaction.html"><strong>《RabbitMQ 事务消息》</strong></a>——单文件图文页，含机制流程图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "rabbitmq-reliability",
+    title: "RabbitMQ 消息确认机制",
+    date: "2026-11-06",
+    tags: ["MQ", "面试"],
+    excerpt: "B 站场景题合集 P92：发送方 confirm 异步回调 ACK/NACK，消费方手动 ACK 处理完才删；断连重投靠业务幂等兜底。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P92。发送方：信道设 confirm 模式，每条消息带唯一 id，投递成功回调 ConfirmCallback、失败回调 ReturnCallback（NACK），二者必回调其一但不保证何时，且是异步的——发完可继续发。消费方：autoAck=false 手动确认，处理完返回 ACK 才删除；默认 true 投递即删，事务回滚时消息等于没消费却已消失。不 ACK 时 RabbitMQ 不再投下一条——既是天然限流也是保最终一致。未 ACK 但连接断开会重投下一个消费者造成重复消费——业务方用消息 id 去重保幂等。</p>
+<blockquote>
+  <p>📖 <a href="pages/rabbitmq-reliability.html"><strong>《RabbitMQ 消息确认机制》</strong></a>——单文件图文页，含两道闸对比与幂等流程，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "rabbitmq-architecture",
+    title: "RabbitMQ 架构设计",
+    date: "2026-11-06",
+    tags: ["MQ", "面试"],
+    excerpt: "B 站场景题合集 P91：生产者只发 Exchange；四种交换机路由规则；Queue 互斥消费非广播；信道复用 TCP 如光缆光纤。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P91。RabbitMQ 基于 AMQP，以可靠性见长。角色链：生产者只发 Exchange 绝不直投 Queue；Exchange 按 RoutingKey 匹配 BindingKey 决定投递；Queue 对多消费者是轮询互斥消费（点对点天然支持），广播靠交换机投多个队列。四种交换机：Fanout 忽略路由键投所有绑定队列、Direct 完全匹配、Topic 通配符一对多、Headers 按消息头匹配（少用）。信道：TCP 连接有限，类 NIO 思想在一条长连接里开多个互相隔离的 AMQP 信道——光缆里有多个光纤。</p>
+<blockquote>
+  <p>📖 <a href="pages/rabbitmq-architecture.html"><strong>《RabbitMQ 架构设计》</strong></a>——单文件图文页，含四交换机表与信道模型，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "dubbo-architecture",
+    title: "Dubbo 整体架构与分层设计",
+    date: "2026-11-06",
+    tags: ["微服务", "面试"],
+    excerpt: "B 站场景题合集 P90：五角色十层架构；两条长连接分工；熔断降级不在其内——与 Spring Cloud 的关键分野。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P90。五大角色：注册中心、Provider（以接口维度注册）、Consumer、Monitor（统计调用次数耗时）、Container（启动加载 Provider）。两条长连接：Provider 与注册中心之间用心跳（超时剔除），注册中心与 Consumer 之间推送最新服务列表。十层分层：接口服务、配置（ServiceConfig/ReferenceConfig + ZK watch）、服务代理（动态代理封装 RPC）、注册、路由（负载均衡）、监控、远程调用（TCP 封装 RPC）、信息交换（同步转异步）、网络传输（抽象 MINA/Netty）、序列化（JSON/Hessian 任选）。能力边界：熔断降级不在 Dubbo 内——与全家桶式 Spring Cloud 最重要的区别。</p>
+<blockquote>
+  <p>📖 <a href="pages/dubbo-architecture.html"><strong>《Dubbo 整体架构与分层设计》</strong></a>——单文件图文页，含五角色表与十层分层表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "springcloud-components",
+    title: "Spring Cloud 核心组件与作用",
+    date: "2026-11-06",
+    tags: ["微服务", "面试"],
+    excerpt: "B 站场景题合集 P89：按调用流程串五组件——Eureka 注册发现、Ribbon 负载均衡、Feign 声明调用、Hystrix 熔断、网关入口。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P89。Spring Cloud 是一套方案而非一个框架，按调用流程串起：<strong>Eureka</strong> 注册发现——CS 架构中间件，服务清单是双层 map（服务名→实例名→IP:端口），心跳剔除，集群相互注册，AP 非强一致可用性优先；<strong>Ribbon</strong> 客户端负载均衡——按服务名替代 IP 端口调用；<strong>Feign</strong> 动态代理封装调用（同 MyBatis mapper 思想），注解即远程调用；<strong>Hystrix</strong> 断路器——命令模式独立线程池隔离，统计超时达阈值熔断，fallback 友好提示加降级（记日志发 MQ）；<strong>网关</strong>——前端未注册 Eureka 走不了 Ribbon/Feign，网关自身注册为节点变平等地位，外部流量享受全套治理。</p>
+<blockquote>
+  <p>📖 <a href="pages/springcloud-components.html"><strong>《Spring Cloud 核心组件与作用》</strong></a>——单文件图文页，含组件流程，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "facade-vs-composite",
+    title: "外观模式与组合模式怎么选",
+    date: "2026-11-06",
+    tags: ["Java", "设计模式"],
+    excerpt: "B 站场景题合集 P88：横向网状依赖用外观封装解耦，纵向深层嵌套用组合统一契约递归遍历。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P88。大系统两种复杂度对症两个模式：<strong>外观模式</strong>治横向网状依赖——移动端不透传底层原子服务，中间建聚合接口（placeOrder）当网关，对上屏蔽库存支付物流等异构子系统内部协议，对内梳理多系统调用为一个原子操作；<strong>组合模式</strong>治纵向深层嵌套——统一抽象契约让容器节点与叶子节点同类型，客户端只调根节点 operation 沿树自动递归分发，免 if-else 判类型。选型：降外部接入成本选外观（防腐层），树形结构一致操作选组合（递归体系）。</p>
+<blockquote>
+  <p>📖 <a href="pages/facade-vs-composite.html"><strong>《外观模式与组合模式怎么选》</strong></a>——单文件图文页，含选型对照表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "design-patterns-why",
+    title: "设计模式到底是什么，为何离不开",
+    date: "2026-11-06",
+    tags: ["Java", "设计模式"],
+    excerpt: "B 站场景题合集 P87：解决代码能活多久；创建/结构/行为三类对症三类混乱；对抗熵增有代价，变化频率超维护成本才正收益。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P87。设计模式解决的不是代码能不能运行，而是代码能活多久。三类方案对症三类混乱：创建型（单例/工厂/建造者）封装 new 的强耦合；结构型（适配器/代理）不改源码组装不兼容组件；行为型（策略/中介者）消灭 if-else、把网状依赖归为总线通讯。根本动力是对抗熵增：系统必然趋向高耦合的腐化。权衡：模式有认知负载与间接层级的代价，业务变化频率超过其维护成本时引入才是正收益——没有银弹。三重境界：手拉车编程 → 套路化过度设计 → 模式内化为直觉，某些场景不用模式恰恰是最高明设计。</p>
+<blockquote>
+  <p>📖 <a href="pages/design-patterns-why.html"><strong>《设计模式到底是什么，为何离不开》</strong></a>——单文件图文页，含三方案表与三重境界，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "shardingsphere-algorithms",
+    title: "ShardingSphere 分片算法全景",
+    date: "2026-11-06",
+    tags: ["MySQL", "架构"],
+    excerpt: "B 站场景题合集 P86：标准/复合策略定维度，取模 O(1) 但扩容全量迁移，时间范围冷热分离零迁移，SPI 自定义兜底。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P86。三层解构：<strong>策略层</strong>——标准分片策略限单片键路由最快，复合分片策略支持多维查询但复杂度陡增；特殊场景用 Hint 强制路由（线程上下文直指数据源）。<strong>算法层</strong>——取模算法 O(1) 纯数学、流量存储完美均衡，适配雪花 id 等数值主键，缺陷是扩容取模偏移触发全量迁移；时间范围算法按时间窗口路由，天然冷热分离、归档直接 DROP 表、未来分片自动创建——扩容成了时间维度的自然延伸零迁移。<strong>SPI 层</strong>——实现标准接口把控制权收回应用层，可注入任意 Java 逻辑甚至读配置中心动态规则。决策矩阵按主键类型与数据形态四条对号入座。</p>
+<blockquote>
+  <p>📖 <a href="pages/shardingsphere-algorithms.html"><strong>《ShardingSphere 分片算法全景》</strong></a>——单文件图文页，含三层结构与决策矩阵，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "sharding-capacity",
+    title: "分库分表数量怎么定：三步推演",
+    date: "2026-11-06",
+    tags: ["MySQL", "架构"],
+    excerpt: "B 站场景题合集 P85：3 年总量÷1000 万定表数对齐 2 的幂，峰值 TPS÷安全水位定库数，逻辑 schema 与物理机解耦换弹性。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P85。红线来自 B+ 树物理逻辑：单表小于 2000 万行树高小于 4 层，单查询 1~3 次磁盘 IO；超限裂变 4 层随机 IO 指数上升。三步推演（订单中心实例）：3 年总量约 17 亿行 ÷ 1000 万 ≈ 170 张，向上对齐 2 的幂取 256 张（哈希路由 id&(n-1) 位运算）；峰值 3000 TPS ÷ 单机安全水位 1000 = 3，冗余取 8 个物理库，单库 375 TPS 负载 40% 以下。逻辑库解耦：初期 2 台物理机跑 8 个 schema，业务增长迁移逻辑库，路由始终 id 对 8 取模——零代码平滑扩容。</p>
+<blockquote>
+  <p>📖 <a href="pages/sharding-capacity.html"><strong>《分库分表数量怎么定：三步推演》</strong></a>——单文件图文页，含推演表与解耦图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "redis-vs-zk-lock",
+    title: "分布式锁：Redis 还是 Zookeeper",
+    date: "2026-11-06",
+    tags: ["微服务", "面试"],
+    excerpt: "B 站场景题合集 P84：Redis LUA 原子加看门狗续期管 90% 业务；ZK 临时顺序节点加链式监听管资金级强一致。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P84。本地锁因 JVM 进程隔离失效，需要独立于应用的全局互斥信号量。Redis 路线（AP，90% 互联网业务的事实标准）：LUA 脚本把 SETNX 与 EXPIRE 封装为原子指令解原子性，watchdog 每 10 秒检测存活自动续期解活性（防业务超 TTL 锁提前释放与误删）。ZooKeeper 路线（CP，资金流转与事务协调）：临时顺序节点实现公平排队、断连自动删除杜绝死锁、链式监听（只监听前一节点）避免羊群效应降低网络负载。数据库悲观锁在高并发下是反模式；Redis 主从切换瞬间极低概率锁丢失在业务层可接受。</p>
+<blockquote>
+  <p>📖 <a href="pages/redis-vs-zk-lock.html"><strong>《分布式锁：Redis 还是 Zookeeper》</strong></a>——单文件图文页，含两路线对比，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "distributed-transaction",
+    title: "分布式事务三大方案与选型",
+    date: "2026-11-06",
+    tags: ["微服务", "面试"],
+    excerpt: "B 站场景题合集 P83：RPC 三态击穿本地事务；XA 同步阻塞、TCC 业务侵入、RocketMQ 事务消息反向回查——按场景对号入座。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P83。问题根源：调用链跨进程后网络抖动让调用方陷入 RPC 三态（成功、失败、未知），本地事务的原子性边界被击穿。三方案：<strong>XA 两阶段</strong>——prepare 锁资源写日志再 commit，同步阻塞连接与行锁、吞吐随节点指数下降、协调者单点；<strong>TCC</strong>——Try 预留资源（库存转冻结字段）、Confirm 提交、Cancel 反向补偿，无锁高并发但业务侵入极高，须处理空回滚与悬挂；<strong>RocketMQ 事务消息</strong>——half message 持久化待投递、本地事务、commit 转可消费，丢指令靠反向回查自动修复。选型：金融账务 XA/Seata，秒杀 TCC，通知类事务消息。</p>
+<blockquote>
+  <p>📖 <a href="pages/distributed-transaction.html"><strong>《分布式事务三大方案与选型》</strong></a>——单文件图文页，含三方案对比表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "base-theory",
+    title: "强一致还是保生存：BASE 理论",
+    date: "2026-11-06",
+    tags: ["微服务", "架构"],
+    excerpt: "B 站场景题合集 P82：P 是前提，AP 换吞吐；基本可用、软状态、最终一致；主流程 ACID 刚一致，旁路 MQ 最终一致。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P82。死结：为了绝对准确加重锁，流量一来锁竞争雪崩。CAP 里 P 是必须接受的前提，执着 C 分区时就只能拒绝服务——电商必须先保 A。BASE 是 AP 的工程化，与 ACID 刚性事务相对的柔性事务：基本可用（洪峰降级保核心链路）、软状态（支付成功积分未到账是合法中间态）、最终一致（T0 到 Tn 窗口内副本对齐）。落地刚柔并济：下单主流程用 ACID 保库存资金强一致，积分等非核心写 MQ 异步消费。两道兜底：幂等（唯一键校验防重复消费）与补偿（梯度重试、死信队列、人工对账）。</p>
+<blockquote>
+  <p>📖 <a href="pages/base-theory.html"><strong>《强一致还是保生存：BASE 理论》</strong></a>——单文件图文页，含三要素表与落地流程，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "dubbo-async",
+    title: "Dubbo 异步调用的原理与三陷阱",
+    date: "2026-11-06",
+    tags: ["微服务", "并发"],
+    excerpt: "B 站场景题合集 P81：CPU 闲但线程池耗尽的资源悖论；Future Map 挂钩机制；上下文丢失、被压 OOM、异常逃逸三陷阱。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P81。资源悖论：同步调用线程九成时间在等 IO，CPU 不到 20% 线程池却耗尽。异步原理：Netty 非阻塞写入，微秒级释放业务线程；全局 Future Map 以 request id 为唯一钩子，TCP 响应到达时 Netty 线程按 id 查表写结果触发回调——链路总耗时从累加变为取最慢。三陷阱：异步回调线程已变致 ThreadLocal 上下文丢失（提交前快照）、发送端非阻塞数万 Future 积压 OOM（信号量限流）、主流程 try-catch 捕不到异步异常（future 链末尾强制 exceptionally 兜底）。舱壁隔离：Servlet 3.0 async 接收后立即转独立业务线程池。</p>
+<blockquote>
+  <p>📖 <a href="pages/dubbo-async.html"><strong>《Dubbo 异步调用的原理与三陷阱》</strong></a>——单文件图文页，含挂钩机制图与陷阱表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "dubbo-loadbalance",
+    title: "Dubbo 负载均衡策略与场景选型",
+    date: "2026-11-06",
+    tags: ["微服务", "面试"],
+    excerpt: "B 站场景题合集 P80：加权随机默认带预热，平滑轮询防突刺，最小活跃自动隔离慢节点，一致性哈希管有状态。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P80。负载均衡站在调用链最后一棒（目录筛节点、路由剔机器之后）。四策略：<strong>Random 加权随机</strong>默认最稳，新机器权重爬坡预热防冷启动打死；<strong>平滑加权轮询</strong>把高权重请求均匀散落在时间轴防流量突刺；<strong>LeastActive 最小活跃数</strong>能者多劳，实时感知积压自动隔离被 Full GC 拖慢的机器；<strong>一致性哈希</strong>管有状态场景（本地缓存、会话粘性），虚拟节点让下线机器流量均匀摊派。配置金字塔：方法级 > 接口级，消费端 > 服务端；SPI 可扩展自定义。</p>
+<blockquote>
+  <p>📖 <a href="pages/dubbo-loadbalance.html"><strong>《Dubbo 负载均衡策略与场景选型》</strong></a>——单文件图文页，含四策略定位表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "http-keepalive",
+    title: "HTTP 长连接与短连接，Nginx 怎么管",
+    date: "2026-11-06",
+    tags: ["网络", "性能"],
+    excerpt: "B 站场景题合集 P79：短连接多 1.5 倍 RTT 加内核开销；Nginx upstream 不配 keepalive 池与 HTTP/1.1 等于白配。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P79。带宽充足 CPU 闲置但响应慢，杀手在连接管理。短连接像买一件结一次账出一次门：应用层几十 ms 只是表象，网络层多 1.5 倍往返时延，内核层频繁创建销毁 socket 空耗 CPU。长连接是会员通道，建连一次复用成千上万次。Nginx 隐藏陷阱：客户端到 Nginx 开了 keepalive，但 Nginx 默认用 HTTP/1.0 短连接连后端，转手切断——后端压力没减。解法：upstream 配 keepalive 连接池 + proxy_http_version 1.1 + 清空 Connection 头。长连接不是银弹：滥用导致 TIME_WAIT 堆积占满端口，公网环境谨慎设超时。</p>
+<blockquote>
+  <p>📖 <a href="pages/http-keepalive.html"><strong>《HTTP 长连接与短连接，Nginx 怎么管》</strong></a>——单文件图文页，含三层代价表与陷阱解法，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "zero-copy",
     title: "零拷贝：把 CPU 从搬运工解放出来",
     date: "2026-11-06",

@@ -18,6 +18,71 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "springboot-anti-decompile",
+    title: "SpringBoot 交付包防反编译",
+    date: "2026-11-06",
+    tags: ["Java", "安全"],
+    excerpt: "B 站场景题合集 P40：ClassFinal 加密 jar 与配置，javaagent 探针启动前解密；诚实边界——ClassWinter 连探针一起混淆。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P40《如何防止 SpringBoot 反编译》。交付客户服务器又没卖源码时，两步搞定：<strong>一</strong>，pom 引 ClassFinal 插件，配置 password（只加密写 #）、packages（加密的包，逗号分隔）、cfgfiles（加密的 application.yml）、libjars（自研依赖）；<strong>二</strong>，<code>java -javaagent:加密包 -jar 加密包</code> 启动。原理是 javaagent 探针（类 AOP 机制）在启动前解密。边界要诚实：ClassFinal 自身 agent 类未加密，看懂即可解密；ClassWinter 连探针一起混淆更难破解。对付一般客户 ClassFinal 足够。</p>
+<blockquote>
+  <p>📖 <a href="pages/springboot-anti-decompile.html"><strong>《SpringBoot 交付包防反编译》</strong></a>——单文件图文页，含插件配置表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "java-design-patterns",
+    title: "支付案例讲透三个设计模式",
+    date: "2026-11-06",
+    tags: ["Java", "设计模式"],
+    excerpt: "B 站场景题合集 P39：if-else → 策略模式 → 简单工厂 + Spring 容器 → 模板方法，四步改造步步有理由。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P39《开发中有没有用设计模式》。四步演进：<strong>策略模式</strong>消 if-else（策略接口 + 三实现 + 上下文，新增类型零改上层）；<strong>简单工厂</strong>去冗余（按类型返回策略接口，上层一目了然）；<strong>Spring 容器</strong>解决 bean 问题（new 出来的不是 bean，实现 ApplicationContextAware 后工厂从容器 getBean，策略内才能注入 Mapper）；<strong>模板方法</strong>收公共逻辑（AbstractPay 的 commonPay 固化流程，check 声明 private 保证校验契约不被子类覆盖）。类增多不是复杂，是解耦。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-design-patterns.html"><strong>《支付案例讲透三个设计模式》</strong></a>——单文件图文页，含四步演进与角色表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "java-synchronized-optimize",
+    title: "synchronized 锁粒度优化：考试交卷案例",
+    date: "2026-11-06",
+    tags: ["Java", "并发"],
+    excerpt: "B 站场景题合集 P38：全局锁到按校分锁，再躲开 Spring 传 String 对象与常量池全局两坑，ConcurrentHashMap 专属锁对象收官。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P38《synchronized 怎么提升性能》。案例是教务系统按学校统计交卷数。第一档整方法加锁线程安全但全串行；第二档按学校维度分锁（同校串行、跨校并行），但有<strong>两个必踩的坑</strong>：Spring 底层传的是 String 对象不是常量，互斥失效，要用 <code>intern()</code> 锁常量池实例；而常量池是全局的，考试接口会阻塞入学接口，最终方案是每个接口独立的 <code>ConcurrentHashMap</code>，<code>computeIfAbsent(school, k -&gt; new Object())</code> 拿专属锁对象——同维度串行、跨维度并行、跨接口互不干扰。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-synchronized-optimize.html"><strong>《synchronized 锁粒度优化：考试交卷案例》</strong></a>——单文件图文页，含两坑解析与最终代码，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "resttemplate-connection-pool",
+    title: "RestTemplate 连接池优化",
+    date: "2026-11-06",
+    tags: ["Java", "性能"],
+    excerpt: "B 站场景题合集 P37：默认工厂无池每请求建连；换 HttpClient 工厂配连接池，maxTotal 按 QPS × 响应秒数再上浮。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P37《RestTemplate 如何优化连接池》。默认 SimpleClientHttpRequestFactory 无池，每次请求经 DNS 解析、三次握手、HTTPS 证书、四次挥手，真正请求只占一小段，高并发下连接无限创建。解法三步：引 httpclient 依赖 → 换 HttpComponentsClientHttpRequestFactory → 配 PoolingHttpClientConnectionManager。参数会算：maxTotal = QPS × 平均响应秒数再上浮 60-70%（QPS 1000、响应 1.1 秒则设 2000 左右）；每域长连接数只在访问固定少数域时有意义；再加空闲存活时间。</p>
+<blockquote>
+  <p>📖 <a href="pages/resttemplate-connection-pool.html"><strong>《RestTemplate 连接池优化》</strong></a>——单文件图文页，含参数经验表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "git-hotfix",
+    title: "Git 修复线上突发 Bug 标准流程",
+    date: "2026-11-06",
+    tags: ["工具", "协作"],
+    excerpt: "B 站场景题合集 P36：stash 暂存手头代码，从线上分支切 hotfix 修复，按紧急度合并——回滚、直上、走 release、跟版本。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P36《Git 怎么修复线上突发 bug》。标准流程：<code>git stash</code> 暂存未完成的开发代码 → 从线上分支切 hotfix 分支修复 → 按紧急度选合并去向。四级处理：特别严重直接回滚上一版本先恢复服务；特急修完直接合并线上分支（来不及测试也先恢复）；一般紧急合并 release 分支走测试发布；非紧急合并 develop 跟版本走。冲突是显式协商不是事故，修完 <code>stash pop</code> 回开发现场。</p>
+<blockquote>
+  <p>📖 <a href="pages/git-hotfix.html"><strong>《Git 修复线上突发 Bug 标准流程》</strong></a>——单文件图文页，含四级处理表与操作序列，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "java-simple-mq",
     title: "用 Java 手写一个简单的消息队列",
     date: "2026-11-06",

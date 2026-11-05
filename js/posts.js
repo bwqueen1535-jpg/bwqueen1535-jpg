@@ -18,6 +18,20 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "mysql-redolog",
+    title: "MySQL RedoLog 崩溃恢复",
+    date: "2026-11-05",
+    tags: ["MySQL", "面试"],
+    excerpt: "B 站场景题合集 P25：脏页未刷盘宕机会丢已提交事务；redo log 顺序写新值、崩溃后重放前滚；三种刷盘策略，强一致选 1。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P25《MySQL 怎么做到 Redolog 崩溃恢复》。问题起点：BufferPool 改完、事务提交、脏页还没刷盘，此刻 MySQL 挂了，这条数据就丢了。解法是修改同步写 redo log（顺序写新值），崩溃后把 redo log 重放回 BufferPool 前滚，恢复到崩溃前状态。</p>
+<p>经典追问"为什么不直接写 ibd 数据文件"：随机写要寻道、慢；redo log 顺序追加、快——直接写要 5 秒的活它 2 秒干完，暴露窗口更小，丢失概率更低（但写 redo log 之前挂掉照样丢，只是概率小）。进阶是 <code>innodb_flush_log_at_trx_commit</code> 三种刷盘策略：0 每秒刷（丢 1 秒）、1 提交时 fsync 实时刷（一致性最高，默认）、2 先写 OS page cache（MySQL 挂不丢、断电才丢）——强一致选 1。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-redolog.html"><strong>《MySQL RedoLog 崩溃恢复》</strong></a>——单文件图文页，含恢复链路图与策略对比表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "mysql-buffer-pool",
     title: "InnoDB BufferPool 工作过程",
     date: "2026-11-05",

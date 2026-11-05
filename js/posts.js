@@ -18,6 +18,34 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "java-deadlock",
+    title: "Java 线上死锁：jstack 定位与四大条件破坏法",
+    date: "2026-11-05",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P4 的死锁答法：转账案例看互等，jps + jstack 两步定位，四条件破坏任意一个，再补银行家算法权衡。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P4《线上发生死锁定位&amp;避免》。死锁在线上没有在线恢复的好办法，只能快速重启，否则线程堆积最终 OOM——所以重点是定位与预防。定位两步：<code>jps</code> 找进程，<code>jstack</code> 直接报 <code>Found one Java-level deadlock</code>，输出里互等线程、持有与等待的对象、卡住的行号一目了然。</p>
+<p>预防靠死锁四条件（互斥、占有且等待、不可抢占、循环等待），破坏任意一个即可：不用锁换 AtomicInteger/CAS、资源管理者一次性申请、Lock 超时自动释放、按 id 排序加锁。但破坏条件大多把并行变串行，吞吐量下降，且满足四条件不必然死锁——实际开发用银行家算法概率性避免，兼顾性能。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-deadlock.html"><strong>《Java 线上死锁：jstack 定位与四大条件破坏法》</strong></a>——单文件图文页，含互等关系图与答题模板，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "java-seckill",
+    title: "Java 秒杀系统设计：先挖痛点，再逐层下推",
+    date: "2026-11-05",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P5 的秒杀答法：先挖痛点再逐层下推——CDN 静态化、限流扩容、Redis 预热 + Lua 原子扣减 + SETNX 防重、MQ 异步下单。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P5《秒杀系统如何设计》。答设计型场景题的框架：第一步挖痛点（瞬时高并发打垮系统、库存少要防超卖），然后从访问层逐层下推到数据层，每层给选型与原因，而不是一上来 Redis、MQ 一顿扯。</p>
+<p>逐层的要点：访问层做商品页静态化 + CDN、按钮管控、滑动验证码、排队动画；转发层 Nginx 集群（单台两三万并发）+ F5/LVS + 四层负载扛十万 QPS + K8s 动态扩缩容 + 限流熔断；服务端 Redis 预热防击穿、Lua 脚本保证扣库存三步原子性、SETNX 防重（前端防君子，后端防小人）；下单走 MQ 异步削峰填谷；数据库读写分离，量大再分库分表。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-seckill.html"><strong>《Java 秒杀系统设计：先挖痛点，再逐层下推》</strong></a>——单文件图文页，含全链路架构图与答题模板，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "java-distributed-lock",
     title: "Java 分布式锁演进：从 synchronized 到 RedLock",
     date: "2026-11-05",

@@ -18,6 +18,71 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "java-simple-mq",
+    title: "用 Java 手写一个简单的消息队列",
+    date: "2026-11-06",
+    tags: ["Java", "并发"],
+    excerpt: "B 站场景题合集 P35：MQ 的本质是生产者消费者——判满 wait、入队 notify、判空 wait、出队 notify，外加五个线程安全细节。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P35《怎么用 Java 实现一个简单的消息队列》。四件套：ArrayBlockingQueue 做缓冲区、生产者锁内判未满则入队（满了 wait）、消费者锁内判非空则 poll（空了 wait）、入队 notify 消费者与出队 notify 生产者互相唤醒。五个细节：判满判空与入出队全程持锁保证原子性；wait 会释放锁（与 sleep 的本质区别）；interrupt 异常要手动唤醒避免永久沉睡；队列泛型换成短信实体类即真实业务；多线程抢锁导致输出顺序不固定。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-simple-mq.html"><strong>《用 Java 手写一个简单的消息队列》</strong></a>——单文件图文页，含完整骨架代码与运行时序推演，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "java-password-reset",
+    title: "忘记密码为什么不发原密码",
+    date: "2026-11-06",
+    tags: ["Java", "安全"],
+    excerpt: "B 站场景题合集 P34：系统真不知道原密码——库里只存不可逆摘要；MD5 两死穴、SHA256 加长、BCrypt 自带随机盐。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P34。标准答案一句话：系统也不知道原密码，库里存的只是不可逆摘要——能还原原密码本身就是重大安全漏洞（库被盗、内部人员作恶）。算法演进三步：<strong>MD5</strong> 抗碰撞弱（UP 实测 4-5 小时跑出碰撞对）、密文固定可暴力枚举，固定盐套路也易被识破；<strong>SHA256</strong> 64 字符更抗碰撞，但仍需自己加随机盐；<strong>BCrypt</strong> 60 字符密文自带版本号、强度因子与随机盐，彩虹表失效，是现在的事实标准，Spring Security 一行 <code>BCryptPasswordEncoder</code> 即用。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-password-reset.html"><strong>《忘记密码为什么不发原密码》</strong></a>——单文件图文页，含三算法对比表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mysql-mvcc",
+    title: "MySQL 隔离级别的实现原理：MVCC",
+    date: "2026-11-06",
+    tags: ["MySQL", "面试"],
+    excerpt: "B 站场景题合集 P33：隐藏列 + undo 版本链 + ReadView 快照；读已提交每次查询建快照，可重复读只建一次。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P33《MySQL 的隔离级别实现原理 MVCC》。MVCC 是隔离级别的无锁实现——不用行锁是因为查询会阻塞变串行。三要素：<strong>隐藏列</strong>（DB_TRX_ID 事务 id、DB_ROLL_PTR 回滚指针、DB_ROW_ID 替补）、<strong>undo 版本链</strong>（旧数据串成链，兼供回滚与快照读）、<strong>ReadView</strong>（当前事务 id、活跃事务集合、最小活跃 id、下一个将分配的 id）。可见性四规则：是自己改的可读、早于最小活跃已提交可读、晚于快照不可读、活跃未提交不可读，不满足就沿链回溯。RC 与 RR 的一线之差：前者每次查询新建 ReadView，后者整个事务只建一次。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-mvcc.html"><strong>《MySQL 隔离级别的实现原理：MVCC》</strong></a>——单文件图文页，含四规则与双事务示例，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mysql-deep-pagination",
+    title: "深分页为什么慢，怎么优化",
+    date: "2026-11-06",
+    tags: ["MySQL", "性能"],
+    excerpt: "B 站场景题合集 P32：limit 50000,100 是取回 50100 条再筛掉 5 万；优化阶梯到 id 定位与游标分页，业务限翻页最省。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P32《深分页为什么慢，怎么优化》。慢的真相：<code>limit 50000,100</code> 不是跳读，引擎层从第 0 条取到第 50100 条交回 Server 层再筛；若走二级索引且未覆盖，50100 条逐条回主键树，慢上加慢。优化阶梯：索引覆盖消回表 → 子查询过渡 → <strong>id 定位分页</strong>（<code>where id &gt; 上页末尾</code> 直接 B+ 树定位，需自增主键，删数据会不满页）→ 游标分页（拿上页最大 id，禁止跨页）→ 分库分表 / ES。业务允许时限制翻页深度（淘宝京东限 100 页）成本最低。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-deep-pagination.html"><strong>《深分页为什么慢，怎么优化》</strong></a>——单文件图文页，含方案对比表与示例 SQL，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "distributed-id",
+    title: "分库分表后的 ID 冲突：五方案与三个轮子",
+    date: "2026-11-06",
+    tags: ["MySQL", "架构"],
+    excerpt: "B 站场景题合集 P31：步长不能扩容、号段有单点、UUID 伤树、Redis 怕宕机、雪花怕回拨；轮子选美团 Leaf。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P31《分库分表 id 冲突解决方案》。五套方案各有死穴：<strong>自增步长</strong>（按表数设步长，致命伤是无法扩容）、<strong>数据库号段</strong>（批取入缓存，号段表单点）、<strong>UUID</strong>（无序致 B+ 树频繁分裂，正确姿势是主键保留自增、UUID 做唯一索引对外）、<strong>Redis INCR</strong>（原子自增，宕机丢号，RDB/AOF 持久化各有短板）、<strong>雪花算法</strong>（41bit 毫秒时间戳 + 10bit 节点 1024 个 + 12bit 序列号每毫秒 4096，有序高性能，怕时间回拨）。现成轮子：百度 UidGenerator（已停维护）、美团 Leaf（双模式 + ZK 解决回拨）、滴滴 Tinyid（号段增强）。</p>
+<blockquote>
+  <p>📖 <a href="pages/distributed-id.html"><strong>《分库分表后的 ID 冲突：五方案与三个轮子》</strong></a>——单文件图文页，含雪花位段账与选型表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "mysql-index-left-like",
     title: "前模糊查询索引失效：四条出路",
     date: "2026-11-05",

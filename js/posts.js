@@ -18,6 +18,123 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "coupon-rule-engine",
+    title: "优惠券规则引擎与组合优惠设计",
+    date: "2026-11-06",
+    tags: ["Java", "架构"],
+    excerpt: "B 站场景题合集 P59：规则脚本入库存库热加载，优惠券三元抽象（条件/动作/约束），组合优惠用剪枝加动态规划。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P59。硬编码灾难：if 套 if 像意大利面，大促凌晨改规则要编译打包重启，改错即 P0。解法是<strong>规则引擎</strong>：逻辑即数据，规则脚本（QlExpress/SpEL/Groovy）存数据库，订单来了引擎动态解析，运营改脚本秒生效免发版。<strong>三元抽象</strong>：任何券拆成 condition（门槛）+ action（权益）+ constraint（互斥/有效期）元数据，免改表支持无限玩法。<strong>组合优惠</strong>是背包问题：十张券穷举 1024 种、二十张百万次，剪枝先砍不可能分支（满 500 券遇 200 元订单整支砍掉），再上动态规划。</p>
+<blockquote>
+  <p>📖 <a href="pages/coupon-rule-engine.html"><strong>《优惠券规则引擎与组合优惠设计》</strong></a>——单文件图文页，含三元抽象表与算法思路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "sensitive-word-filter",
+    title: "敏感词过滤的架构师答案",
+    date: "2026-11-06",
+    tags: ["Java", "架构"],
+    excerpt: "B 站场景题合集 P58：contains 是性能谋杀、正则会栈溢出；DFA 建树 O(n) 匹配，清洗归一化防绕过，双缓冲热更新。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P58。天真方案死法：List + contains 循环是几万词乘几千字的性能谋杀；正则引擎回溯可栈溢出；原样匹配防不住表情穿插与火星文。架构师三件套：<strong>DFA 算法</strong>——敏感词建树（赌→博/局，词尾标记），文章逐字顺树爬，匹配效率只与文章长度有关、与词库大小无关；<strong>防绕过流水线</strong>——去噪清洗扒表情标点，归一化拼音转汉字繁转简，再进树一抓一个准；<strong>双缓冲热更新</strong>——后台构建新 Map 建好后引用指针瞬间切换，旧 Map 交 GC，词库天天变服务不重启。</p>
+<blockquote>
+  <p>📖 <a href="pages/sensitive-word-filter.html"><strong>《敏感词过滤的架构师答案》</strong></a>——单文件图文页，含防绕过流水线图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "multi-tenant-saas",
+    title: "多租户 SaaS 系统设计",
+    date: "2026-11-06",
+    tags: ["架构", "面试"],
+    excerpt: "B 站场景题合集 P57：三种隔离模式按客户分级定价；MyBatis 拦截器自动注入 tenant_id 兜底，限流加迁移治吵闹邻居。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P57。"加个 tenant_id 字段"太初级，三坑：手抖漏 where 或传错租户 id 是数据泄露事故；一客户一库在万级客户下连接池爆掉；大客户大促抢满 CPU 的吵闹邻居。方案：<strong>分级隔离</strong>——VIP 独立数据库（物理隔离最贵最安全）、中产独立 schema、平民共享表加 tenant_id；<strong>工具兜底</strong>——永远不要相信人，MyBatis Plus 拦截器拦下 SQL 自动注入当前租户 id，业务无感且安全；<strong>治邻居</strong>——给大租户设 QPS 阈值限流，长期占用资源自动迁移独立库。</p>
+<blockquote>
+  <p>📖 <a href="pages/multi-tenant-saas.html"><strong>《多租户 SaaS 系统设计》</strong></a>——单文件图文页，含三模式表与拦截器流程，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "token-storage",
+    title: "用户登录 Token 存储的安全漏洞",
+    date: "2026-11-06",
+    tags: ["Java", "安全"],
+    excerpt: "B 站场景题合集 P56：localStorage 挨 XSS、纯 cookie 挨 CSRF、JWT 撤不回；终解 HttpOnly cookie + Redis 集中管控。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P56。三连坑：<strong>localStorage</strong> 是给 JS 存数据用的，XSS 注入脚本一行 getItem 就把 token 偷走冒充转账；<strong>纯 cookie</strong> 自动携带，CSRF 钓鱼链接一点转账请求带着正确 cookie 直达后端；<strong>JWT 无状态</strong>——发出去像泼出去的水，改密码注销后旧 token 照用到期（换了锁芯没收钥匙）。补救与终解：JWT 配 Redis 黑名单（注销改密拉黑 token id），或回归本质用随机 sessionId + Redis 存会话（更安全、可撤销、可续期免 refresh token）。前端落 cookie 加 HttpOnly 加 SameSite，后端 Redis 集中管控。</p>
+<blockquote>
+  <p>📖 <a href="pages/token-storage.html"><strong>《用户登录 Token 存储的安全漏洞》</strong></a>——单文件图文页，含三连坑表与两套方案图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "comment-nesting",
+    title: "评论盖楼系统：楼中楼的工业级设计",
+    date: "2026-11-06",
+    tags: ["架构", "面试"],
+    excerpt: "B 站场景题合集 P55：parent_id 有 N+1 死亡螺旋、path 有写放大；root_id 一枪拉平内存组装，ZSet 热榜，点赞 write-back。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P55。两个天真方案：parent_id 邻接表查 100 层楼发 100 次 SQL（N+1 打爆连接池）；path 物化路径删顶层评论要更新几万条子孙路径（写放大），like 前缀查询千万级龟速。工业级方案：<strong>root_id 反范式</strong>——不管第几层都冗余顶级楼层 id，where root_id 一枪查平全量子孙，Java 内存组装成树（用 CPU 换 IO）；<strong>冷热分离</strong>——Redis ZSet 存 top 热评（点赞数当 score），先拿 Redis 前十条其余回库；<strong>点赞 write-back</strong>——只 INCR Redis，攒几秒或 100 赞批量刷库，Redis 挂了丢几秒点赞数用户无感，最终一致性。</p>
+<blockquote>
+  <p>📖 <a href="pages/comment-nesting.html"><strong>《评论盖楼系统：楼中楼的工业级设计》</strong></a>——单文件图文页，含方案对比与性能两坑，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "live-reward",
+    title: "直播间高并发打赏系统设计",
+    date: "2026-11-06",
+    tags: ["架构", "面试"],
+    excerpt: "B 站场景题合集 P54：扣款同步乐观锁、加钱 MQ 聚合每秒 5000 条并一条 UPDATE；广播合并加分桶对抗十亿消息。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P54。直接开事务死于<strong>主播账户热点行锁</strong>：几万线程改同一行，连接池占满 TPS 个位数。资金链路两段式：扣款同步（乐观锁保证不透支），加钱异步——礼物消息进 MQ，聚合服务每秒捞 5000 条内存算总额，一条 <code>UPDATE 余额=余额+5000</code>，把堵死的路变成高速路。第二个坑<strong>广播风暴</strong>：1000 人/秒送礼 × 100 万观众 = 每秒 10 亿条消息。两招：消息合并（攒几百毫秒合成"100 人送出 500 个火箭"播一个大特效）、分桶轮播（100 万人分 1000 桶轮流发，抹平峰值）。</p>
+<blockquote>
+  <p>📖 <a href="pages/live-reward.html"><strong>《直播间高并发打赏系统设计》</strong></a>——单文件图文页，含资金链路图与广播两招，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "stock-deduction",
+    title: "高并发库存扣减与防超卖：漏斗架构",
+    date: "2026-11-06",
+    tags: ["架构", "面试"],
+    excerpt: "B 站场景题合集 P53：悲观锁热点行、纯 Redis 少卖、分桶体验割裂全是坑；三层漏斗——归零拦截、LUA 原子扣减、MQ 削峰。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P53。常规方案坟场：数据库悲观锁热点行竞争，1 万请求排队串行 TPS 几百直接宕机；纯 Redis 扣减遇服务重启少卖（Redis 扣了订单没插）；库存分桶导致桶 1 卖光桶 2 有货的体验割裂。大厂标准答案三层漏斗：<strong>第一层</strong>库存归零标记放 Nginx/本地缓存，9.99 万请求连 Redis 都不碰直接返回；<strong>第二层</strong>LUA 脚本在 Redis 内原子地判库存并扣减（get 再 set 必超卖）；<strong>第三层</strong>扣减成功发 MQ，数据库异步按自己节奏记账。核心不是 SQL 溜，是把洪水层层过滤成细流。</p>
+<blockquote>
+  <p>📖 <a href="pages/stock-deduction.html"><strong>《高并发库存扣减与防超卖：漏斗架构》</strong></a>——单文件图文页，含坟场表与漏斗图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "redis-cluster-16384",
+    title: "Redis Cluster 为什么是 16384 个槽",
+    date: "2026-11-06",
+    tags: ["Redis", "面试"],
+    excerpt: "B 站场景题合集 P52：16384 槽心跳 2KB 防 gossip 内网风暴；1000 节点均摊 16 槽够用；smart client 加 hashtag 实战。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P52。CRC16 本可 65536 槽，作者砍到 16384：<strong>带宽账</strong>——去中心化集群 gossip 心跳携带槽位 bitmap，65536 槽 8KB、16384 槽 2KB，大集群每秒疯传 8KB 心跳等于内网 DDoS；<strong>规模账</strong>——官方建议节点不超 1000，均摊每节点 16 槽足够负载均衡，为达不到的万级规模牺牲网络是过度设计。生产两坑：笨客户端被 moved 踢皮球双倍延迟（用 smart client 本地缓存槽位地图）；mget 跨节点报 CROSSSLOT（hashtag 大括号把相关 key 锁进同槽，数据局部性优化）。</p>
+<blockquote>
+  <p>📖 <a href="pages/redis-cluster-16384.html"><strong>《Redis Cluster 为什么是 16384 个槽》</strong></a>——单文件图文页，含两笔账与实战坑表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "redis-lru-oom",
+    title: "Redis 配了 LRU 为什么还 OOM",
+    date: "2026-11-06",
+    tags: ["Redis", "性能"],
+    excerpt: "B 站场景题合集 P51：近似 LRU 采样漏掉钉子户、删大 key 阻塞主线程、碎片不还 OS；三张配置处方对症下药。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P51。配置生效了但你被机制骗了，三大坑：<strong>采样骗局</strong>——Redis 是近似 LRU，随机抓 5 个（maxmemory-samples 默认 5）淘汰最旧，冷数据钉子户没被抓到、热数据倒霉被删；<strong>大 key 卡死</strong>——选中存 500 万条的 hash，单线程主线程埋头回收，get/set 全堵，stop the world 式卡顿；<strong>碎片幽灵</strong>——数据删了内存不还操作系统（分配器行为），Redis 觉得有空地 OS 觉得没连续空间直接 OOM。三张处方：samples 调 10、开 lazyfree-lazy-eviction、开 activedefrag。</p>
+<blockquote>
+  <p>📖 <a href="pages/redis-lru-oom.html"><strong>《Redis 配了 LRU 为什么还 OOM》</strong></a>——单文件图文页，含三坑三药对照，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "redis-transaction",
     title: "Redis 事务与原子性的大坑",
     date: "2026-11-06",

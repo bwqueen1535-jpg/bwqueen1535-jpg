@@ -18,6 +18,20 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "java-distributed-lock",
+    title: "Java 分布式锁演进：从 synchronized 到 RedLock",
+    date: "2026-11-05",
+    tags: ["Java", "面试"],
+    excerpt: "秒杀场景下的锁升级之路：SETNX 手写锁的三个坑、Redisson 看门狗、主从 AP 漏洞与 RedLock，一页演进图讲透。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P9《分布式集群架构下怎么保证并发安全》。全篇用程序员小徐做秒杀踩坑的故事，把锁的演进讲成一条完整的升级路线：单机加 <code>synchronized</code> 压测通过 → Nginx 扩容成集群又超卖（JVM 级锁只锁单进程）→ Redis SETNX 手写分布式锁 → 踩到不设过期时间死锁、业务超时被趁虚而入、误释放别人的锁三个坑 → 换 Redisson（唯一 ID 绑定 + 看门狗每 10 秒续期）→ 最后是主从 AP 模式的同步漏洞，用 RedLock 全节点加锁兜底。</p>
+<p>这条演进路径本身就是分布式锁场景题的标准答题顺序：每一层升级都对应一个真实踩坑，讲完演进再主动抛出主从漏洞与 RedLock，层次感就出来了。</p>
+<blockquote>
+  <p>📖 <a href="pages/java-distributed-lock.html"><strong>《Java 分布式锁演进：从 synchronized 到 RedLock》</strong></a>——单文件图文页，含演进决策图与答题模板，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "prevent-duplicate-order",
     title: "Java 防止重复下单：两道防线保幂等",
     date: "2026-11-05",

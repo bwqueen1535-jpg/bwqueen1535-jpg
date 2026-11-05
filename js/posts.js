@@ -18,6 +18,71 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "redis-transaction",
+    title: "Redis 事务与原子性的大坑",
+    date: "2026-11-06",
+    tags: ["Redis", "面试"],
+    excerpt: "B 站场景题合集 P50：pipeline 只快不原子、MULTI/EXEC 不回滚、watch 高并发 CPU 爆炸；LUA 是标准答案但脚本杀不掉。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P50《Redis 事务与原子性的大坑》。四大方案坑位：<strong>pipeline</strong> 只省网络往返，服务端执行不独占、别人能插队，毫无原子性；<strong>MULTI/EXEC 事务</strong>中间命令报错照常执行剩余命令且不支持回滚，与数据库事务两回事；<strong>watch 乐观锁</strong>在秒杀场景 999 人失败重试，应用服务器 CPU 先 100% 雪崩；<strong>LUA 脚本</strong>是标准答案——脚本被当整体执行、结束前无人插队，但高分点是主动讲它的死穴：脚本里 while true 或执行 5 秒，单线程 Redis 全世界等它，已执行写操作的脚本 unkillable，唯一出路 SHUTDOWN NOSAVE。选型三句话：批量不在乎原子用 pipeline；逻辑简单要原子用 LUA（短且快）；逻辑复杂上分布式锁或 MQ。</p>
+<blockquote>
+  <p>📖 <a href="pages/redis-transaction.html"><strong>《Redis 事务与原子性的大坑》</strong></a>——单文件图文页，含四方案坑位表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "jvm-card-table",
+    title: "JVM 跨代引用与卡表",
+    date: "2026-11-06",
+    tags: ["JVM", "面试"],
+    excerpt: "B 站场景题合集 P49：Minor GC 不扫老年代怎么知道谁活着——卡表空间换时间、写屏障自动打标、伪共享检查再写。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P49《JVM 跨代引用与卡表》。悖论：Minor GC 只扫年轻代，老年代引用年轻代时不扫会误杀、全扫几十 GB 是自杀。破局是<strong>卡表</strong>：老年代切 512 字节卡页，引用年轻代的卡页标脏记进字节数组，Minor GC 只扫脏卡页（范围从几十 GB 缩到几百字节）。谁来打标？<strong>写屏障</strong>——JVM 在赋值指令后自动插入 mark dirty（类 AOP 思想，与内存屏障无关）。隐藏大坑<strong>伪共享</strong>：卡表是 byte 数组，64 个标记挤同一 CPU 缓存行，并发更新互相打脸，JDK 7+ 检查再写缓解。</p>
+<blockquote>
+  <p>📖 <a href="pages/jvm-card-table.html"><strong>《JVM 跨代引用与卡表》</strong></a>——单文件图文页，含四层递进结构，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "tcp-max-connections",
+    title: "一台服务器最多多少 TCP 连接",
+    date: "2026-11-06",
+    tags: ["网络", "面试"],
+    excerpt: "B 站场景题合集 P48：65535 是客户端端口上限；服务端受文件描述符、内存（4KB/连接）、CPU、内核参数四道关。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P48《一台服务器最多能建立多少个 TCP 连接》。脱口而出 65535 就露馅了——那是客户端端口上限；服务端只监听 80 一个端口，连接的唯一标识是四元组（源 IP、源端口、目标 IP、目标端口）。真正的四道关：文件描述符默认 1024 是门槛（ulimit 调到百万级）；内存每连接约 4KB，16GB 机器理论支撑 200 万连接；CPU 处理协议栈决定并发上限；内核参数配合。2 核 4G 默认配置几千个到头，高配加调优百万连接不是梦。</p>
+<blockquote>
+  <p>📖 <a href="pages/tcp-max-connections.html"><strong>《一台服务器最多多少 TCP 连接》</strong></a>——单文件图文页，含四道关结构，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "jvm-escape-analysis",
+    title: "逃逸分析与栈上分配",
+    date: "2026-11-06",
+    tags: ["JVM", "面试"],
+    excerpt: "B 站场景题合集 P47：对象不一定在堆上——不逃逸时标量替换拆成局部变量进栈，TLAB 不是栈上分配，同步消除白送。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P47《逃逸分析与栈上分配》。三种逃逸状态：方法逃逸（return 或传参出去）、线程逃逸（赋给 static 被多线程访问）、不逃逸。不逃逸时 JIT 两招：<strong>标量替换</strong>——根本不创建对象，把字段拆成标量局部变量放栈帧，方法结束自动销毁 GC 零参与；<strong>同步消除</strong>——锁对象不逃逸出线程时直接去掉 synchronized（StringBuffer 有时与 StringBuilder 一样快的原因）。关键纠偏：TLAB 不是栈上分配，它是堆内 Eden 区的线程私有地盘，对象仍要 GC。限制：依赖 JIT 触发、复杂调用链分析不动、分析本身有成本。</p>
+<blockquote>
+  <p>📖 <a href="pages/jvm-escape-analysis.html"><strong>《逃逸分析与栈上分配》</strong></a>——单文件图文页，含三种逃逸表与标量替换示意，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "jvm-constant-pool",
+    title: "JVM 常量池与 intern() 的版本真相",
+    date: "2026-11-06",
+    tags: ["JVM", "面试"],
+    excerpt: "B 站场景题合集 P46：三个池子分清；StringTable 1.7 从永久代搬进堆，intern 从复制变引用，滥用会撞哈希链表。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P46《JVM 常量池与 intern()》。三个池子：Class 常量池（class 文件静态图纸）、运行时常量池（类加载后的实物）、StringTable（本质 hash table）。版本大迁徙：1.6 StringTable 住永久代（空间小 GC 难易 OOM），1.7 起搬进堆。同一道经典题 <code>new String(\"1\")+new String(\"1\")</code> 后 intern 再 == 比较：1.6 是 false（复制进永久代，两个对象），1.7+ 是 true（池里只记录堆对象引用，one instance one reference）。滥用 intern 的坑：几千万 URL 全塞进去，哈希碰撞链表拉长，intern 变遍历，CPU 100%——调优 -XX:StringTableSize 调大桶数。</p>
+<blockquote>
+  <p>📖 <a href="pages/jvm-constant-pool.html"><strong>《JVM 常量池与 intern() 的版本真相》</strong></a>——单文件图文页，含版本对比与调优参数，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "jvm-tricolor-gc",
     title: "JVM 三色标记与漏标：CMS 与 G1 的分水岭",
     date: "2026-11-06",

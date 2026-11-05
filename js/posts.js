@@ -18,6 +18,48 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "prevent-duplicate-order",
+    title: "Java 防止重复下单：两道防线保幂等",
+    date: "2026-11-05",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P7 的重复下单答法：前端按钮置灰防君子，后端 Redis SETNX 防小人，token + 商品 URL + 操作标识组 key。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P7《如何防止重复下单》。网络阻塞时用户连点下单，订单服务会生成多条未支付订单——风险集中在「用户发起下单」这一步，确认、支付、回调三步都不怕重复。</p>
+<p>答法是两道防线：<strong>前端置灰</strong>挡住无意连点，但只防君子不防小人；<strong>后端 Redis SETNX</strong> 才是兜底——key 由用户 token + 商品 URL + 操作标识组成，过期 3-5 秒，重复请求只成功一次。工程上用自定义注解 + AOP 环绕通知做成通用防重复提交，已登录用 token 维度、未登录用 IP + URL + 参数维度。</p>
+<blockquote>
+  <p>📖 <a href="pages/prevent-duplicate-order.html"><strong>《Java 防止重复下单：两道防线保幂等》</strong></a>——单文件图文页，支持深浅色切换，可以直接分享。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "prevent-order-brushing",
+    title: "Java 防止刷单：黑产攻防与风控体系",
+    date: "2026-11-05",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P8 的刷单防治答法：人肉机黑产有完整产业链，单点防御全部失守，靠业务风控 + 技术风控 + 用户画像组合拳。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P8《怎么防止刷单？》。人肉机刷单是一个人操控几十上百台手机抢奖品转手赚差价，直播间抽奖、茅台抢购都是重灾区。残酷的现实是：手机验证码被接码平台绕过、图形验证码被打码平台绕过、IP 限制被独立 IP 绕过、账号监控被养号软件绕过——<strong>黑产有完整产业链，单点防御形同虚设</strong>。</p>
+<p>正解是组合拳：<strong>业务风控</strong>（实名认证、消费门槛、随机优惠、限中奖次数、忠诚度分层、奖池封顶）+ <strong>技术风控</strong>（限流、K8S 自动扩容、黑名单 + 布隆过滤器）+ <strong>大数据用户画像</strong>（腾讯靠微信 QQ 社交数据建模，普通团队可直接用腾讯云天御）。刷单防不死，只能控风险。</p>
+<blockquote>
+  <p>📖 <a href="pages/prevent-order-brushing.html"><strong>《Java 防止刷单：黑产攻防与风控体系》</strong></a>——单文件图文页，支持深浅色切换，可以直接分享。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "qr-code-login-design",
+    title: "Java 扫码登录设计：三步状态机",
+    date: "2026-11-05",
+    tags: ["Java", "面试"],
+    excerpt: "B 站场景题合集 P10 的扫码登录答法：二维码状态存 Redis，手机端 token 作身份证明，临时 token 保证一码只扫一次。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P10《让你设计一个扫码登录怎么实现？》。本质是把手机端已登录的身份，借二维码传递给 PC 端：后端生成全局唯一二维码 ID 并把状态存进 Redis，PC 端轮询状态（淘宝）或走长连接（抖音，WebSocket/SSE）。</p>
+<p>三步状态机：<strong>生成二维码</strong>（发 ID、存状态）→ <strong>扫码</strong>（手机端带用户 token + 二维码 ID 请求，状态改已扫描，后端发临时 token 保证一码只扫一次）→ <strong>确认登录</strong>（手机端带临时 token 确认，后端生成 PC token 存 Redis、删临时 token，PC 端轮询到已使用拿到 token）。三种 token、三个角色，状态机串起全流程。</p>
+<blockquote>
+  <p>📖 <a href="pages/qr-code-login-design.html"><strong>《Java 扫码登录设计：三步状态机》</strong></a>——单文件图文页，含三端时序图，支持深浅色切换，可以直接分享。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "order-timeout-design",
     title: "Java 订单超时自动取消：四种实现与阿里选型",
     date: "2026-11-05",

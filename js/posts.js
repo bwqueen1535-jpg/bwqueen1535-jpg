@@ -18,6 +18,71 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "mysql-index-left-like",
+    title: "前模糊查询索引失效：四条出路",
+    date: "2026-11-05",
+    tags: ["MySQL", "性能"],
+    excerpt: "B 站场景题合集 P30：like '%x' 退化全表扫描；反向索引、限定范围、索引覆盖、Elasticsearch 四招对症下药。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P30《前模糊索引失效》。原理一句话：B+ 树按索引值有序排列，<code>like '%庶'</code> 连第一个字都不确定，有序性失效只能全表扫描。四条出路：<strong>反向索引</strong>（多存一份倒序列，前模糊变后模糊，代价是写入双份维护）、<strong>限定范围</strong>（附加时间条件缩小扫描面）、<strong>索引覆盖</strong>（只查索引列免回表）、<strong>Elasticsearch</strong>（倒排索引天生做模糊搜索）。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-index-left-like.html"><strong>《前模糊查询索引失效：四条出路》</strong></a>——单文件图文页，含四招选型表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mysql-count",
+    title: "count(*)、count(1)、count(字段) 谁更快",
+    date: "2026-11-05",
+    tags: ["MySQL", "面试"],
+    excerpt: "B 站场景题合集 P29：count(字段) 排 NULL，另两个全统计；count(*) 与 count(1) 官方声明无性能区别。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P29。先分功能：<code>count(字段)</code> 不统计该列为 NULL 的行，<code>count(*)</code> 与 <code>count(1)</code> 统计所有行。再破性能争论：MySQL 官方明确两者无区别，用 <code>explain + show warnings</code> 可见底层把 count(*) 改写成 count(0)——0 和 1 都只是"这行存在"的标记常量。非要分高下，count(1) 省掉那步优化改写，理论略胜。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-count.html"><strong>《count(*)、count(1)、count(字段) 谁更快》</strong></a>——单文件图文页，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mysql-clustered-index",
+    title: "聚集索引与非聚集索引",
+    date: "2026-11-05",
+    tags: ["MySQL", "面试"],
+    excerpt: "B 站场景题合集 P28：不是索引类型是存储方式——InnoDB 主键即聚集，二级索引回表；MyISAM 分文件，主键也要回表。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P28《聚集索引和非聚集索引》。两层理解：<strong>主键视角</strong>——InnoDB 主键索引叶子存索引加整行数据（聚集），非主键索引叶子存索引加主键值（二级索引），查索引外的列要回表，只查索引列则索引覆盖免回表；<strong>引擎视角</strong>——InnoDB 索引与数据同住 .ibd 文件，MyISAM 分成 .MYI 与 .MYD 两个文件，所以 MyISAM 连主键查询也要"回表"（按磁盘指针跨文件取数据）。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-clustered-index.html"><strong>《聚集索引与非聚集索引》</strong></a>——单文件图文页，含对比表与覆盖索引要点，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mysql-binlog-vs-redolog",
+    title: "Binlog 与 RedoLog 为何缺一不可",
+    date: "2026-11-05",
+    tags: ["MySQL", "面试"],
+    excerpt: "B 站场景题合集 P27：binlog 是 Server 层全量历史，redo log 是 InnoDB 事务专用恢复日志——都能恢复，自动化天差地别。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P27。两者都记修改后的新值，为何留俩？历史原因：MySQL 早期没有 InnoDB，binlog 先于事务存在，记的是全量修改历史；redo log 随 InnoDB 而生，专记事务信息与提交状态。崩溃时 redo log 自动重放回 BufferPool 全自动恢复；binlog 理论上也能恢复，但难定位丢了哪些事务、还要手动——职责不同，缺一不可。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-binlog-vs-redolog.html"><strong>《Binlog 与 RedoLog 为何缺一不可》</strong></a>——单文件图文页，含对比表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "mysql-binlog-flush",
+    title: "MySQL Binlog 刷盘机制",
+    date: "2026-11-05",
+    tags: ["MySQL", "面试"],
+    excerpt: "B 站场景题合集 P26：sync_binlog 三档——0 交给 OS、1 实时刷、N 攒批刷；5.7.7 后默认 1，双 1 是强一致姿势。",
+    content: `
+<p>学自 B 站 UP 主「java架构师徐庶」的场景题合集 P26《binlog 刷盘机制》。binlog 由 Server 层提供、所有引擎通用，刷盘由 <code>sync_binlog</code> 控制三档：<strong>0</strong> 写 OS page cache 系统闲时刷（最险）；<strong>1</strong> 提交时实时写实时刷（最稳，性能开销最大）；<strong>N</strong> 攒满 N 笔事务刷一次（折中）。默认值 5.7.7 前是 0、之后是 1——与 redo log 的 <code>innodb_flush_log_at_trx_commit=1</code> 组成"双 1 配置"，强一致标准姿势。</p>
+<blockquote>
+  <p>📖 <a href="pages/mysql-binlog-flush.html"><strong>《MySQL Binlog 刷盘机制》</strong></a>——单文件图文页，含三档对比表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "mysql-redolog",
     title: "MySQL RedoLog 崩溃恢复",
     date: "2026-11-05",

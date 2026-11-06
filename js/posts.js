@@ -18,6 +18,21 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "rea-reverse-clone",
+    title: "用 REA 逆向复刻软件：流程、成本与边界",
+    date: "2026-11-06",
+    tags: ["AI工具", "逆向工程"],
+    excerpt: "B 站「程序员老詹」：把 EXE 交给 AI 框架复刻成可运行小软件——18 分钟、700 万 token、5 毛 8。哪些能复刻、哪些复刻不了。",
+    content: `
+<p>学自 B 站 UP 主「程序员老詹」。REA（Reverse Engineer Anything）是围绕 AI 编程工具搭的反向工程框架，底层挂 IDA Pro 一类反汇编器。流程四步：给 EXE 路径 → 选好模型 → 用自然语言描述核心功能 → 等它跑，中途授权。</p>
+<p>实测复刻一个屏幕放大标注工具：<strong>约 18 分钟、700 多万 token、0.58 元</strong>（DeepSeek V4）。提示词要写具体动作（"按下 Ctrl+E 放大屏幕"、"在放大画面上画标记"），只说要复刻则随机性太大。安装门槛是 Node.js 22.19 以上，版本不对装不上。</p>
+<p>边界：单功能小工具可行；客户端加服务端的系统只能拿到前端壳；有混淆加密的拿不到有效信息。产物是可演示版本，快捷键还出现过冲突。</p>
+<blockquote>
+  <p>📖 <a href="pages/rea-reverse-clone.html"><strong>《用 REA 逆向复刻软件：流程、成本与边界》</strong></a>——单文件图文页，含安装要求、四步流程、可行性对照表，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "rag-vs-llm-wiki",
     title: "传统 RAG 与 LLM Wiki：知识库该选哪种",
     date: "2026-11-06",

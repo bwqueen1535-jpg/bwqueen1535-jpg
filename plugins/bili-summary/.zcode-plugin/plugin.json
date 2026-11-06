@@ -1,0 +1,8 @@
+{
+  "name": "bili-summary",
+  "version": "0.2.0",
+  "description": "总结B站视频：抓取视频字幕并生成结构化中文总结（仅支持B站，不支持其他平台）",
+  "author": { "name": "quewb" },
+  "skills": "./skills",
+  "commands": "./commands"
+}

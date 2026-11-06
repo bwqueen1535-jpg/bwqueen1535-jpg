@@ -1,0 +1,18 @@
+{
+  "name": "dev-myblog-733eb163",
+  "plugins": [
+    {
+      "name": "bili-summary",
+      "source": "./bili-summary",
+      "version": "0.2.0",
+      "description": "总结B站视频：抓取视频字幕并生成结构化中文总结（仅支持B站，不支持其他平台）",
+      "displayName": "B站视频总结",
+      "displayName_i18n": {
+        "zh-CN": "B站视频总结"
+      },
+      "description_i18n": {
+        "zh-CN": "抓取B站视频字幕，生成结构化中文总结（仅支持B站）"
+      }
+    }
+  ]
+}

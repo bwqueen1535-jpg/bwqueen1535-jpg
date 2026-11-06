@@ -18,6 +18,136 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "harness-quickstart",
+    title: "DeepSeek Harness 上手：定位、安装与插件生态",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P1：Harness 是什么、解决什么问题、怎么装起来并跑通第一个插件。",
+    content: `
+<p>Harness（驾驭工程）= 大模型 + 外围执行框架。大模型负责想，Harness 负责把事做完：读文件、调工具、跑代码、处理报错。P1 讲清它和 Claude Code / Codex 这类成品的区别——Harness 是可观测、可定制、可自由组合的底层平台，附带安装与插件生态入门。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-quickstart.html"><strong>《DeepSeek Harness 上手：定位、安装与插件生态》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "harness-why-study",
+    title: "DeepSeek Harness 为什么值得研究",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P2：运行可追溯、创造模式、一切皆插件三大设计。",
+    content: `
+<p>三大核心设计：<strong>运行有据可循</strong>——完整记录执行轨迹，每步成败都留存，结果能回溯怎么生成的；<strong>创造模式</strong>——不限于现成模板，可为自己长期场景搭专属运行逻辑；<strong>一切皆插件</strong>——模型、工具、存储都是可替换组件，运行中换件不崩。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-why-study.html"><strong>《DeepSeek Harness 为什么值得研究》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "ai-coding-engineering",
+    title: "AI 编程从 Demo 到企业级工程化",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P3：提示词工程→上下文工程→驾驭工程三阶段。",
+    content: `
+<p>AI 工程三阶段：提示词工程（怎么问）、上下文工程（先喂文档再下指令）、驾驭工程（复杂任务靠约束 + 反馈 + 纠偏）。驾驭工程 = Harness 体系，核心是让模型遵从一系列约束，而不是让它猜。</p>
+<blockquote>
+  <p>📖 <a href="pages/ai-coding-engineering.html"><strong>《AI 编程从 Demo 到企业级工程化》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "harness-env-skills",
+    title: "Harness 实战环境与六大 Skill 体系",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P4：VS Code + Claude Code 环境、TulingShop 项目、六大 Skill 概览。",
+    content: `
+<p>实战环境：VS Code + Claude Code 插件，模型用国产 coding plan。真实项目 TulingShop（Vue3 + TypeScript 前端，Spring Boot + MySQL + Redis + MQ + MyBatis 后端），从零基于 AI 工程化搭建。开发层六大 Skill：需求分析、编码、代码评审、单元测试、持续集成、部署上线。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-env-skills.html"><strong>《Harness 实战环境与六大 Skill 体系》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "harness-core-design",
+    title: "Harness 体系核心设计：入口文件与约束规范",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P5：CLAUDE.md 入口文件、文件索引、rules 下的工程结构与开发流程。",
+    content: `
+<p>入口文件 CLAUDE.md 随每条指令进上下文，写技术栈、红线约束（价格字段用 integer 存分、Redis 前缀规范）和文件索引。rules 目录下三个关键文件：工程结构（分层、依赖方向、模块划分）、开发流程（十阶段流水）、编码规范（异常体系、禁用魔法值、分层规范）。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-core-design.html"><strong>《Harness 体系核心设计：入口文件与约束规范》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "harness-sdd-rules",
+    title: "SDD 规范驱动开发：编码规范与领域术语",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P6：编码规范细则、业务模型、接口协议、领域术语表。",
+    content: `
+<p>编码规范把公司的强制约定写死给模型：价格用 integer 存分、禁魔法值、异常走自研 business exception 体系而非直接抛运行时异常、DAO / Service / Controller / Redis 前缀各有写法。业务模型、接口协议（响应码与字段）、领域术语（商品 / SKU / 购物车项 / 订单项命名、状态术语、缓存架构术语）都要写——冷门军工政务项目模型没学过，不写就乱生成。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-sdd-rules.html"><strong>《SDD 规范驱动开发：编码规范与领域术语》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "harness-four-layer",
+    title: "Rules + Skills + Wiki + Changes 四层工程化体系",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P7：一条指令如何自动调用 Skill，需求分析与编码 Skill 内部步骤。",
+    content: `
+<p>规范文件是材料，Skill 是把材料串成流水线的执行器。入口文件的文件索引让模型知道每个 Skill 干什么、何时启用。需求分析 Skill 三步：需求解析、影响评估、冲突检测，产物落在 harness/changes/ 下一个功能一个目录。编码 Skill 的前置条件是拿到需求清单，产物清单交给下游用。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-four-layer.html"><strong>《Rules + Skills + Wiki + Changes 四层工程化体系》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "harness-legacy-project",
+    title: "Agent 如何理解老项目：业务模型与接口协议",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P8：编码前的上下文准备、生成顺序、反馈回路。",
+    content: `
+<p>编码 Skill 的前置条件：先读需求分析清单，再读 rules 规则文件，再加载 Wiki 模块文档，最后才编码。生成顺序自下而上：实体 → 数据库层 → 服务层 → MQ/缓存 → 接口层 → 前端。企业实践在 Skill 之间插入人工校验形成<strong>反馈回路</strong>——全自动跑到尾产物多半有 bug，每加一道人工确认结果就离预期近一步。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-legacy-project.html"><strong>《Agent 如何理解老项目：业务模型与接口协议》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "harness-six-skills",
+    title: "六大核心 Skill 开发实战与 AI 编程三大难题",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P9：六大 Skill 交接、人工评审分工、token/幻觉/熵增三大难题。",
+    content: `
+<p>六个 Skill 依次激活、用清单交接。人工只守核心链路（高并发下单链路绝不无人评审上线），非核心模块交给评审 Skill 循环修到通过。三大难题：token 消耗、幻觉（规范写清楚仍偶发违规）、代码熵增（长期多人高频交互后可控性下降，需专门治理）。Harness 一句话：让 AI 从无序生成走向受控可交付。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-six-skills.html"><strong>《六大核心 Skill 开发实战与 AI 编程三大难题》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "harness-demo-vs-enterprise",
+    title: "何时才需要 Harness：Demo 与企业级项目的分水岭",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P10：Demo 与企业级项目的差异、写 Skill 的前提、不同层次开发者的处境。",
+    content: `
+<p>Demo 级项目（网页、套壳站、小工具、小游戏）不需要 Harness，代码乱也能跑。功能上万、有高并发与分布式要求、多人长期协作的企业级项目，没有约束根本做不下去。写 Skill 的前提是懂技术和懂业务：不懂 MQ 可靠性就写不出操作 MQ 的 Skill，不懂微服务划分就写不出架构级 Skill。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-demo-vs-enterprise.html"><strong>《何时才需要 Harness：Demo 与企业级项目的分水岭》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "kafka-zookeeper",
     title: "Kafka 中 ZooKeeper 的作用",
     date: "2026-11-06",

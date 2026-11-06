@@ -18,6 +18,71 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "harness-invoice-recap",
+    title: "一次实战复盘：规范没写全，模型就开始自己决定",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P13：订单发票功能跑通后暴露的设计错误——发票字段被塞进订单表。",
+    content: `
+<p>判断 Skill 链路是否生效看产物落点：需求分析目录按预期生成，说明流程确实走了规范。但产物里发票字段被塞进订单表，根因不是模型能力不足，是编码 Skill 没写“附属小实体单独建表”这条规则。<strong>规范未覆盖之处，模型按自身经验补</strong>。修法是把约定写进 Skill，再用同类需求重跑验证。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-invoice-recap.html"><strong>《一次实战复盘：规范没写全，模型就开始自己决定》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "harness-refactor-loop",
+    title: "让 AI 写的代码长期可维护：定期扫描与重构",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P14：定期扫描 + 重构 Skill，对抗代码熵增。",
+    content: `
+<p>只让 AI 加功能，代码迟早烂掉。加一条反向流程：扫描 Skill 按半个月到一个月扫全项目代码<strong>加</strong>需求变更记录，输出重构建议清单；重构 Skill 按人工确认过的清单执行并跑测试。两者拆开，避免让 AI 自己决定改什么。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-refactor-loop.html"><strong>《让 AI 写的代码长期可维护：定期扫描与重构》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "agent-three-generations",
+    title: "Agent 是什么：原生模型的四个短板与三代跃迁",
+    date: "2026-11-06",
+    tags: ["Agent", "课程笔记"],
+    excerpt: "Harness 实战 P16：原生模型四短板、Agent 补的四件事、工具调用/任务编排/工程底座三代。",
+    content: `
+<p>原生模型四个短板：没记忆、知识有截止、不能联网、碰不到本地资源。Agent 补四件事——翻译官、工具达人、记忆管家、任务管家。三代跃迁：工具调用（实习生，催一下动一下）→ 任务编排（ReAct 等，自主拆解）→ 工程底座（Harness，换模型不用重写）。判断标准：换一个模型要不要重写代码。</p>
+<blockquote>
+  <p>📖 <a href="pages/agent-three-generations.html"><strong>《Agent 是什么：原生模型的四个短板与三代跃迁》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "agent-seven-architectures",
+    title: "七种 Agent 架构怎么选：四个梯队与成本构成",
+    date: "2026-11-06",
+    tags: ["Agent", "课程笔记"],
+    excerpt: "Harness 实战 P17：单Agent/ReAct/意图路由/工作流/多Agent/规划式/黑板，四个梯队选型。",
+    content: `
+<p>七个架构分四梯队：入门（单 Agent、ReAct）、流程（意图路由、工作流编排）、协同（多 Agent）、复杂（规划式、黑板）。选型从最简单开始，用真实失败案例驱动升级。<strong>上线后成本构成</strong>：开发约 30%，人工标注与调优约 45%，运维约 7%——开发只占三成，剩下七成花在上线之后。</p>
+<blockquote>
+  <p>📖 <a href="pages/agent-seven-architectures.html"><strong>《七种 Agent 架构怎么选：四个梯队与成本构成》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
+    slug: "harness-execution-flow",
+    title: "DeepSeek Harness 的执行流程：从请求到自我优化",
+    date: "2026-11-06",
+    tags: ["Harness", "课程笔记"],
+    excerpt: "Harness 实战 P18：四段流程、两大核心模块、人和 AI 各自优化 AI 的效率对比。",
+    content: `
+<p>流程四段：接入需求 → 执行层（七种架构任选） → 生成候选结果 → 自动评估优化。关键在第三段与第四段分离：结果先过评估层再出去。两大模块：核心能力（一切接入、万能适配）与基座（自我净化优化）。传统方案靠加人调优，边际收益递减；底座方案评估标准统一，随数据积累效果还能涨，维护只需 1 人。</p>
+<blockquote>
+  <p>📖 <a href="pages/harness-execution-flow.html"><strong>《DeepSeek Harness 的执行流程：从请求到自我优化》</strong></a>——单文件图文页，含对照表与执行链路，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "harness-quickstart",
     title: "DeepSeek Harness 上手：定位、安装与插件生态",
     date: "2026-11-06",

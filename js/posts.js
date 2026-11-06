@@ -18,6 +18,19 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "rag-vs-llm-wiki",
+    title: "传统 RAG 与 LLM Wiki：知识库该选哪种",
+    date: "2026-11-06",
+    tags: ["RAG", "课程笔记"],
+    excerpt: "Harness 实战 P19：RAG 完整链路、边界，LLM Wiki 图结构知识库与选型对照。",
+    content: `
+<p>传统 RAG：提取 → 切块 → 向量化 → 相似度检索五块 → 拼 prompt 推理。适合变化慢的固定文档，不适合每天新增的数据和跨文档推理。LLM Wiki 让 Agent 把文档整理成带目录和关键词链接的图结构，检索变成结构导航，新文档增量并入。实际项目里两者组合使用。</p>
+<blockquote>
+  <p>📖 <a href="pages/rag-vs-llm-wiki.html"><strong>《传统 RAG 与 LLM Wiki：知识库该选哪种》</strong></a>——单文件图文页，含对照表与选型判断，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "harness-invoice-recap",
     title: "一次实战复盘：规范没写全，模型就开始自己决定",
     date: "2026-11-06",

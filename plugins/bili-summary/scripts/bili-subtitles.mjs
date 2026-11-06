@@ -44,13 +44,23 @@ function fmtDuration(sec) {
     : `${m}:${String(s).padStart(2, '0')}`
 }
 
+// B站接口要求请求头里带设备标识（buvid3/buvid4），只给 SESSDATA 会被判为异常客户端返回 412。
+// 设备标识随进程固定，保证同一次运行内所有请求看起来来自同一台机器。
+const DEVICE_ID = `${Date.now()}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}infoc`
+
+function buildCookie(sessdata) {
+  const parts = [`b_nut=${Math.floor(Date.now() / 1000)}`, `buvid3=${DEVICE_ID}`, `buvid4=${DEVICE_ID}`]
+  if (sessdata) parts.push(`SESSDATA=${sessdata}`)
+  return parts.join('; ')
+}
+
 async function getJson(url, cookie) {
   const headers = { 'User-Agent': UA, Accept: 'application/json', Referer: REFERER }
   if (cookie) headers.Cookie = cookie
   const res = await fetch(url, { headers, signal: AbortSignal.timeout(20000) })
   if (!res.ok) {
     if (res.status === 412) {
-      fail('B站风控(412)：短时间请求过多或请求头不完整，请等几分钟后重试；已配置 SESSDATA 可降低概率')
+      fail('B站风控(412)：请求过于频繁被限流，等几分钟后重试；设备标识已自动附带，频繁重试会延长限流时间')
     }
     fail(`请求失败 HTTP ${res.status}：${url}`)
   }
@@ -168,7 +178,7 @@ async function main() {
   const pArg = pIdx >= 0 ? Number(args[pIdx + 1]) : null
 
   const sessdata = pickSessdata()
-  const cookie = sessdata ? `SESSDATA=${sessdata}` : null
+  const cookie = buildCookie(sessdata)
 
   const id = await resolveVideoId(input)
   const pageFromUrl = parsePageFromUrl(input)

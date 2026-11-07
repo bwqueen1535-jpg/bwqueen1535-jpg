@@ -18,6 +18,20 @@ const SITE = {
 
 const POSTS = [
   {
+    slug: "nat-traversal-choose",
+    title: "内网穿透怎么选：OpenFrp、花生壳与同类对比",
+    date: "2026-11-07",
+    tags: ["网络", "工具选型"],
+    excerpt: "先分需求再选产品：只有自己访问用 Tailscale；要公网地址，免费长期用 OpenFrp（12Mbps 签到领流量），固定域名选 cpolar 或自建 frp，企业省心才选花生壳付费。",
+    content: `
+<p>选内网穿透，先回答两个问题：<strong>谁来访问</strong>（只有自己的设备，还是任何互联网用户），<strong>愿意投入什么</strong>（零成本、百元每年，还是一台 VPS）。只有自己远程访问（RDP、SSH、NAS），用 Tailscale 虚拟组网，免费额度大且不暴露公网；要给别人一个公网地址，再在隧道服务里挑。</p>
+<p>免费档差距很大：花生壳、natapp、cpolar 都限 1Mbps，只有 OpenFrp 给到 12Mbps（4 条隧道，基础 1GB/月，每日签到领流量）。要固定域名的稳定地址：cpolar 基础版 99 元/年起，或者买台百元级 VPS 自建 frp——带宽、域名、证书全自己做主，摄像头和 NAS 影音这类大流量场景基本只有这一条路。花生壳免费版 1Mbps 基本不可用，它值的是图形化零门槛和正式的售后支持，专业版 398 元/年起，适合企业用途。</p>
+<blockquote>
+  <p>📖 <a href="pages/nat-traversal-choose.html"><strong>《内网穿透怎么选：OpenFrp、花生壳与同类对比》</strong></a>——单文件图文页，含场景速查表、四路线决策图、参数对比与免费带宽图，支持深浅色切换。</p>
+</blockquote>
+`,
+  },
+  {
     slug: "rea-reverse-clone",
     title: "用 REA 逆向复刻软件：流程、成本与边界",
     date: "2026-11-06",
